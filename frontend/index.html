@@ -1,162 +1,459 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Library App</title>
+<title>KMUTT Library</title>
 
 <style>
 * {
   box-sizing: border-box;
 }
 
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-}
-
 body {
-  font-family: Arial;
-  background: url("asset/images/bg.jpg") no-repeat center center / cover;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #fff7f5;
+  color: #1f1f1f;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+}
+
+.navbar {
+  height: 78px;
+  background: white;
+  display: flex;
   align-items: center;
-  position: relative;
+  padding: 0 46px;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.15);
 }
 
-/* 🔥 DARK OVERLAY (THIS FIXES EVERYTHING) */
-body::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.65);
-  z-index: 0;
-}
-
-/* HEADER */
-.header {
+.logo {
+  width: 40px;
+  height: 40px;
+  background: #ff3d1f;
   color: white;
-  font-size: 40px;
-  font-weight: bold;
-  margin-bottom: 80px;
-  text-align: center;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
-  z-index: 1;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-right: 12px;
 }
 
-/* CARD */
+.brand h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.brand p {
+  margin: 4px 0 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.main {
+  padding: 50px 70px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.badge {
+  display: inline-block;
+  background: #ffe8e1;
+  color: #ff3d1f;
+  padding: 12px 18px;
+  border-radius: 999px;
+  font-size: 14px;
+}
+
+h1 {
+  font-size: 36px;
+  margin: 24px 0 16px;
+}
+
+.subtitle {
+  color: #667085;
+  font-size: 18px;
+  line-height: 1.6;
+  max-width: 590px;
+}
+
 .container {
-  width: 380px;
-  background: rgba(243, 241, 241, 0.75);
-  backdrop-filter: blur(15px);
-  padding: 30px;
-  border-radius: 20px;
-  box-shadow: 0 8px 30px rgba(157, 88, 88, 0.3);
-  color: rgb(25, 1, 1);
-
-  position: relative;
-  z-index: 1;
+  background: white;
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.12);
+  border: 1px solid #e5e7eb;
+  margin-top: 20px;
+  max-width: 592px;
 }
 
-/* INPUT */
+h2 {
+  margin-top: 0;
+  margin-bottom: 28px;
+}
+
+label {
+  display: block;
+  margin: 16px 0 8px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
 input {
   width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  border-radius: 10px;
-  border: none;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid #d9dde3;
+  font-size: 16px;
   outline: none;
 }
 
-/* BUTTON */
+input:focus {
+  border-color: #000000;
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input {
+  padding-right: 50px;
+}
+
+.eye-btn {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.eye-btn img {
+  width: 22px;
+  height: 22px;
+}
+
+.input-error {
+  border-color: #dc2626 !important;
+  background: #fff1f2;
+}
+
+.input-success {
+  border-color: #16a34a !important;
+  background: #f0fdf4;
+}
+
+.rule-box {
+  margin-top: 8px;
+  font-size: 13px;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.rule-box p {
+  margin: 4px 0;
+}
+
+.bad {
+  color: #dc2626;
+  font-size: 13px;
+}
+
+.good {
+  color: #16a34a;
+  font-size: 13px;
+}
+.login-icon {
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+  margin-right: 8px;
+
+  filter: brightness(0) invert(1);
+}
+
 button {
   width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  border-radius: 10px;
+  padding: 16px;
+  margin-top: 20px;
+  border-radius: 12px;
   border: none;
-  background: #ffffff;
-  color: #333;
+  background: #ff3d1f;
+  color: white;
+  font-size: 16px;
   font-weight: bold;
   cursor: pointer;
-  transition: 0.3s;
+  box-shadow: 0 6px 12px rgba(255,61,31,0.3);
 }
 
 button:hover {
-  background: #764ead;
-  transform: scale(1.02);
+  background: #e7351b;
 }
 
-/* MESSAGE */
+button:disabled {
+  background: #d1d5db;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.link {
+  text-align: center;
+  color: #ff3d1f;
+  margin-top: 24px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
 .success {
   display: none;
-  background: #00c853;
+  background: #16a34a;
   color: white;
-  padding: 10px;
-  border-radius: 8px;
+  padding: 12px;
+  border-radius: 10px;
   text-align: center;
+  margin-bottom: 16px;
 }
 
-/* LINKS */
-p {
+.error {
+  background: #dc2626;
+}
+
+.stats {
+  display: flex;
+  gap: 16px;
+  margin-top: 42px;
+  max-width: 592px;
+}
+
+.stat {
+  flex: 1;
+  background: white;
+  border-radius: 14px;
+  padding: 18px;
   text-align: center;
-  cursor: pointer;
-  margin-top: 15px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+  border: 1px solid #e5e7eb;
+}
+
+.stat strong {
+  color: #ff3d1f;
+  font-size: 24px;
+}
+
+.stat p {
+  margin: 6px 0 0;
+  color: #667085;
+  font-size: 13px;
+}
+
+.hero-img {
+  width: 100%;
+  height: 600px;
+  object-fit: cover;
+  border-radius: 24px;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.18);
+}
+
+.footer {
+  margin-top: auto;
+}
+
+.footer {
+  background: white;
+  border-top: 1px solid #e5e7eb;
+  text-align: center;
+  padding: 28px;
+  color: #667085;
   font-size: 14px;
+  margin-top: auto;
+}
+
+@media (max-width: 900px) {
+  .main {
+  padding: 48px 70px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+  min-height: calc(100vh - 160px);
+  }
+
+  .hero-img {
+    height: 360px;
+  }
+
+  .stats {
+    flex-direction: column;
+  }
+  
 }
 </style>
 </head>
 
 <body>
 
-<!-- 🔥 HEADER NOW PROPERLY PLACED -->
-<div class="header">
-    KMUTT Reservation System
+<div class="navbar">
+  <div class="logo">📖</div>
+  <div class="brand">
+    <h3>KMUTT Library</h3>
+    <p>Seat Reservation System</p>
+  </div>
 </div>
 
-<div class="container">
+<div class="main">
 
-<div id="msg" class="success"></div>
+  <div>
+    <span class="badge">Welcome to KMUTT Library</span>
 
-<!-- LOGIN -->
-<div id="loginBox">
-  <h2>Login</h2>
+    <h1>Reserve Your Perfect Study Space</h1>
 
-  <input id="loginIdentifier" placeholder="Email or Student ID">
-  <input id="loginPassword" type="password" placeholder="Password">
+    <p class="subtitle">
+      Find and book your ideal seat in the library. Whether you need a quiet
+      zone for focused study or a collaborative space for group work, we've got
+      you covered.
+    </p>
 
-  <button onclick="login()">Login</button>
+    <div class="container">
 
-  <p onclick="showRegister()">Create account</p>
+      <div id="msg" class="success"></div>
+
+      <div id="loginBox">
+        <h2>Student Login</h2>
+
+        <label>Email or Student ID</label>
+        <input id="loginIdentifier" placeholder="Enter your email or student ID">
+
+        <label>Password</label>
+        <div class="password-wrapper">
+          <input id="loginPassword" type="password" placeholder="Enter your password">
+          <span class="eye-btn" onclick="togglePassword('loginPassword')">
+            <img src="asset/images/eyesicon.png">
+          </span>
+        </div>
+
+        <button onclick="login()">
+          <img class="login-icon" src="asset/images/login_icon.png">
+          Login to Continue
+        </button>
+
+        <p class="link" onclick="showRegister()">Create account</p>
+        <p class="link" onclick="forgotPassword()">Forgot password?</p>
+      </div>
+
+      <div id="registerBox" style="display:none;">
+        <h2>Register</h2>
+
+        <label>First Name</label>
+        <input id="first_name" placeholder="First Name">
+
+        <label>Last Name</label>
+        <input id="last_name" placeholder="Last Name">
+
+        <label>Email</label>
+        <input id="email" placeholder="Email">
+
+        <label>Password</label>
+        <div class="password-wrapper">
+          <input 
+            id="password" 
+            type="password" 
+            placeholder="Example: Test1234!"
+            oninput="checkPassword(); checkConfirmPassword();"
+          >
+          <span class="eye-btn" onclick="togglePassword('password')">
+            <img src="asset/images/eyesicon.png">
+          </span>
+        </div>
+
+        <div id="passwordRules" class="rule-box" style="display:none;">
+          <p id="ruleLength" class="bad">At least 8 characters</p>
+          <p id="ruleUpper" class="bad">At least one uppercase letter (A-Z)</p>
+          <p id="ruleLower" class="bad">At least one lowercase letter (a-z)</p>
+          <p id="ruleNumber" class="bad">At least one number (0-9)</p>
+          <p id="ruleSpecial" class="bad">At least one special character (@ # ! %)</p>
+        </div>
+
+        <label>Re-enter Password</label>
+        <div class="password-wrapper">
+          <input 
+            id="confirm_password" 
+            type="password" 
+            placeholder="Re-enter your password"
+            oninput="checkConfirmPassword()"
+          >
+          <span class="eye-btn" onclick="togglePassword('confirm_password')">
+            <img src="asset/images/eyesicon.png">
+          </span>
+        </div>
+
+        <p 
+          id="confirmPasswordRules" 
+          class="bad" 
+          style="display:none; margin-top:8px;"
+        >
+          Passwords do not match
+        </p>
+
+        <label>Student ID</label>
+        <input 
+          id="student_id" 
+          placeholder="Student ID"
+          maxlength="10"
+          oninput="checkStudentId()"
+        >
+
+        <div id="studentIdRules" class="rule-box" style="display:none;">
+          <p class="bad"> Student ID must be exactly 10 numbers</p>
+        </div>
+
+        <button id="registerBtn" onclick="register()" disabled>Register</button>
+
+        <p class="link" onclick="showLogin()">Back to login</p>
+      </div>
+
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <strong>300+</strong>
+        <p>Total Seats</p>
+      </div>
+      <div class="stat">
+        <strong>3</strong>
+        <p>Study Zones</p>
+      </div>
+      <div class="stat">
+        <strong>24/7</strong>
+        <p>Availability</p>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <img class="hero-img" src="asset/images/image1.jpg" alt="Library study space">
+  </div>
+
 </div>
 
-<!-- REGISTER -->
-<div id="registerBox" style="display:none;">
-  <h2>Register</h2>
-
-  <input id="first_name" placeholder="First Name">
-  <input id="last_name" placeholder="Last Name">
-  <input id="email" placeholder="Email">
-  <input id="password" type="password" placeholder="Password">
-  <input id="student_id" placeholder="Student ID">
-
-  <button onclick="register()">Register</button>
-
-  <p onclick="showLogin()">Back to login</p>
-</div>
-
+<div class="footer">
+  © 2026 King Mongkut's University of Technology Thonburi. All rights reserved.
 </div>
 
 <script>
-function showMsg(text) {
-  let msg = document.getElementById("msg");
+function showMsg(text, type = "success") {
+  const msg = document.getElementById("msg");
+
   msg.innerText = text;
+  msg.className = type === "error" ? "success error" : "success";
   msg.style.display = "block";
-  setTimeout(() => msg.style.display = "none", 2000);
+
+  setTimeout(() => {
+    msg.style.display = "none";
+  }, 2500);
 }
 
 function showRegister() {
@@ -169,8 +466,217 @@ function showLogin() {
   document.getElementById("registerBox").style.display = "none";
 }
 
-// REGISTER
+function setRule(id, passed, text) {
+  const rule = document.getElementById(id);
+
+  if (passed) {
+    rule.className = "good";
+    rule.innerText = "✅ " + text;
+  } else {
+    rule.className = "bad";
+    rule.innerText = "❌ " + text;
+  }
+}
+
+function checkPassword() {
+  const passwordInput = document.getElementById("password");
+  const passwordBox = document.getElementById("passwordRules");
+  const password = passwordInput.value;
+
+  const hasLength = password.length >= 8;
+  const hasUpper = /[A-Z]/.test(password);
+  const hasLower = /[a-z]/.test(password);
+  const hasNumber = /[0-9]/.test(password);
+  const hasSpecial = /[^A-Za-z0-9]/.test(password);
+
+  setRule("ruleLength", hasLength, "At least 8 characters");
+  setRule("ruleUpper", hasUpper, "At least one uppercase letter (A-Z)");
+  setRule("ruleLower", hasLower, "At least one lowercase letter (a-z)");
+  setRule("ruleNumber", hasNumber, "At least one number (0-9)");
+  setRule("ruleSpecial", hasSpecial, "At least one special character (@ # ! %)");
+
+  const isValid =
+    hasLength && hasUpper && hasLower && hasNumber && hasSpecial;
+
+  passwordInput.classList.remove("input-error", "input-success");
+
+  if (password.length === 0) {
+    passwordBox.style.display = "none";
+  } else if (isValid) {
+    passwordBox.style.display = "none";
+    passwordInput.classList.add("input-success");
+  } else {
+    passwordBox.style.display = "block";
+    passwordInput.classList.add("input-error");
+  }
+
+  updateRegisterButton();
+  return isValid;
+}
+function forgotPassword() {
+  const email = prompt("Enter your email:");
+  if (!email) return;
+
+  const studentId = prompt("Enter your Student ID:");
+  if (!studentId) return;
+
+  const password = prompt(
+    "Enter new password:\n\nAt least 8 characters\nUppercase letter\nLowercase letter\nNumber\nSpecial character"
+  );
+  if (!password) return;
+
+  const confirmPassword = prompt("Re-enter new password:");
+  if (!confirmPassword) return;
+
+  if (password !== confirmPassword) {
+    showMsg("Passwords do not match", "error");
+    return;
+  }
+
+  const strongPassword =
+    password.length >= 8 &&
+    /[A-Z]/.test(password) &&
+    /[a-z]/.test(password) &&
+    /[0-9]/.test(password) &&
+    /[^A-Za-z0-9]/.test(password);
+
+  if (!strongPassword) {
+    showMsg("Password is not strong enough", "error");
+    return;
+  }
+
+  fetch("http://localhost:3000/forgot-password", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      email: email,
+      student_id: studentId,
+      password: password
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.message === "Password reset success") {
+      showMsg("Password reset success. Please login again.");
+
+      document.getElementById("loginPassword").value = "";
+      document.getElementById("loginIdentifier").value = email;
+
+      setTimeout(() => {
+        document.getElementById("loginPassword").focus();
+      }, 300);
+    } else {
+      showMsg(data.message, "error");
+    }
+  })
+  .catch(() => {
+    showMsg("Server error", "error");
+  });
+}
+
+function checkConfirmPassword() {
+  const password = document.getElementById("password").value;
+  const confirmInput = document.getElementById("confirm_password");
+  const confirmText = document.getElementById("confirmPasswordRules");
+  const confirmPassword = confirmInput.value;
+
+  const isValid =
+    password === confirmPassword &&
+    confirmPassword.length > 0;
+
+  confirmInput.classList.remove("input-error", "input-success");
+
+  if (confirmPassword.length === 0) {
+    confirmText.style.display = "none";
+  } else if (isValid) {
+    confirmText.style.display = "none";
+    confirmInput.classList.add("input-success");
+  } else {
+    confirmText.style.display = "block";
+    confirmInput.classList.add("input-error");
+  }
+
+  updateRegisterButton();
+  return isValid;
+}
+
+function checkStudentId() {
+  const studentInput = document.getElementById("student_id");
+  const studentBox = document.getElementById("studentIdRules");
+  const studentId = studentInput.value;
+
+  const isValid = /^[0-9]{10}$/.test(studentId);
+
+  studentInput.classList.remove("input-error", "input-success");
+
+  if (studentId.length === 0) {
+    studentBox.style.display = "none";
+  } else if (isValid) {
+    studentBox.style.display = "none";
+    studentInput.classList.add("input-success");
+  } else {
+    studentBox.style.display = "block";
+    studentInput.classList.add("input-error");
+  }
+
+  updateRegisterButton();
+  return isValid;
+}
+
+function updateRegisterButton() {
+  const registerBtn = document.getElementById("registerBtn");
+
+  const password = document.getElementById("password").value;
+  const confirmPassword = document.getElementById("confirm_password").value;
+  const studentId = document.getElementById("student_id").value;
+
+  const passwordValid =
+    password.length >= 8 &&
+    /[A-Z]/.test(password) &&
+    /[a-z]/.test(password) &&
+    /[0-9]/.test(password) &&
+    /[^A-Za-z0-9]/.test(password);
+
+  const confirmPasswordValid =
+    password === confirmPassword && confirmPassword.length > 0;
+
+  const studentIdValid = /^[0-9]{10}$/.test(studentId);
+
+  registerBtn.disabled = !(
+    passwordValid &&
+    confirmPasswordValid &&
+    studentIdValid
+  );
+}
+
+function togglePassword(inputId) {
+  const input = document.getElementById(inputId);
+
+  if (input.type === "password") {
+    input.type = "text";
+  } else {
+    input.type = "password";
+  }
+}
+
 function register() {
+  if (!checkPassword()) {
+    showMsg("Password is not strong enough", "error");
+    return;
+  }
+
+  if (!checkConfirmPassword()) {
+    showMsg("Passwords do not match", "error");
+    return;
+  }
+
+  if (!checkStudentId()) {
+    showMsg("Student ID must be exactly 10 numbers", "error");
+    return;
+  }
+
   fetch("http://localhost:3000/register", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -184,12 +690,37 @@ function register() {
   })
   .then(res => res.json())
   .then(data => {
-    showMsg(data.message);
-    showLogin();
+   if (data.message === "Register success") {
+        showMsg(data.message);
+
+        document.getElementById("first_name").value = "";
+        document.getElementById("last_name").value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("password").value = "";
+        document.getElementById("confirm_password").value = "";
+        document.getElementById("student_id").value = "";
+
+        document.getElementById("password").classList.remove("input-error", "input-success");
+        document.getElementById("confirm_password").classList.remove("input-error", "input-success");
+        document.getElementById("student_id").classList.remove("input-error", "input-success");
+
+        document.getElementById("passwordRules").style.display = "none";
+        document.getElementById("confirmPasswordRules").style.display = "none";
+        document.getElementById("studentIdRules").style.display = "none";
+
+        document.getElementById("registerBtn").disabled = true;
+
+        showLogin();
+
+    } else {
+      showMsg(data.message, "error");
+    }
+  })
+  .catch(() => {
+    showMsg("Cannot connect to server", "error");
   });
 }
 
-// LOGIN
 function login() {
   fetch("http://localhost:3000/login", {
     method: "POST",
@@ -201,19 +732,26 @@ function login() {
   })
   .then(res => res.json())
   .then(data => {
-
     if (!data.token) {
-      showMsg(data.message);
+      showMsg(data.message, "error");
       return;
     }
 
     localStorage.setItem("token", data.token);
+    localStorage.setItem("role", data.role);
 
     showMsg("Login success");
 
     setTimeout(() => {
-      window.location.href = "dashboard.html";
+      if (data.role === "admin") {
+        window.location.href = "dashboard.html";
+      } else {
+        window.location.href = "dashboard.html";
+      }
     }, 800);
+  })
+  .catch(() => {
+    showMsg("Cannot connect to server", "error");
   });
 }
 </script>
