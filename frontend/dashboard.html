@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Library Dashboard</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: url("asset/images/bg.jpg") no-repeat center center / cover;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  color: white;
+}
+
+body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+}
+
+.sidebar {
+  width: 240px;
+  background: rgba(17,24,39,0.6);
+  backdrop-filter: blur(15px);
+  padding: 20px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  flex: 1;
+  padding: 20px;
+  z-index: 2;
+height: 100vh;
+  overflow-y: auto;
+}
+
+/* GLOBAL HEADER */
+.header {
+  margin-bottom: 15px;
+  padding: 15px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 16px;
+}
+
+/* CARDS */
+.card {
+  background: rgba(255,255,255,0.08);
+  padding: 15px;
+  border-radius: 16px;
+  margin-bottom: 15px;
+}
+
+/* PAGES */
+.page { display: none; }
+.page.active { display: block; }
+
+/* MENU */
+.menu {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.menu-item {
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.menu-item.active {
+  background: rgba(255,255,255,0.2);
+}
+
+/* LOGOUT */
+.logout-btn {
+  margin-top: auto;
+
+  background: #ef4444;
+  color: white;
+
+  width: 100%;
+  border: none;
+  outline: none;
+  box-shadow: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  font-size: 16px;
+  font-weight: bold;
+
+  padding: 14px;
+  border-radius: 12px;
+
+  cursor: pointer;
+
+  /* IMPORTANT FIX */
+  appearance: none;
+  -webkit-appearance: none;
+
+  transition: 0.2s ease;
+}
+
+.logout-btn:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+  box-shadow: none;
+}
+
+.logout-btn:focus {
+  outline: none;
+  box-shadow: none;
+}
+/* MAP (YOUR ORIGINAL FIX KEPT) */
+.map-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.map-container img {
+  max-width: 900px;
+  width: 100%;
+  border-radius: 16px;
+}
+
+#map {
+  position: relative;
+}
+
+/* SEATS (RESTORED EXACTLY) */
+.seat {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: black;
+  font-weight: bold;
+  z-index: 10;
+}
+
+.group { background: #22c55e; }
+.meeting { background: #3b82f6; }
+.quiet { background: #facc15; }
+.computer { background: #a855f7; }
+
+.selected {
+  outline: 3px solid white;
+}
+
+/* PROFILE UI */
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 6px 0;
+  border-radius: 8px;
+  border: none;
+}
+
+button.save {
+  background: #22c55e;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <h3>📚 Library</h3>
+
+  <div class="menu">
+    <div class="menu-item active" onclick="goPage('dashboard')">📊 Dashboard</div>
+    <div class="menu-item" onclick="goPage('seats')">🪑 Seats</div>
+    <div class="menu-item" onclick="goPage('profile')">👤 Profile</div>
+  </div>
+
+  <button class="logout-btn" onclick="logout()">Logout</button>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- HEADER (ALWAYS SHOW NAME) -->
+  <div class="header">
+    <h2 id="welcome">Welcome</h2>
+    <p>Here is your dashboard overview</p>
+  </div>
+
+<!-- DASHBOARD (RESTORED - NOT REMOVED) -->
+<div id="dashboard" class="page active">
+
+  <div class="card">
+    <h2>🤖 Seat Assistant</h2>
+    <p>Tell me what you need and I’ll recommend a seat for you.</p>
+  </div>
+
+  <div class="card">
+    <h3>📊 Live Stats</h3>
+
+    <div style="display:flex;gap:10px;">
+      <div class="card" style="flex:1;text-align:center;">
+        <h2>6</h2>
+        <p>Available</p>
+      </div>
+
+      <div class="card" style="flex:1;text-align:center;">
+        <h2>2</h2>
+        <p>Booked</p>
+      </div>
+
+      <div class="card" style="flex:1;text-align:center;">
+        <h2>8</h2>
+        <p>Total</p>
+      </div>
+    </div>
+<!-- 📢 ANNOUNCEMENT BOARD (UPGRADED) -->
+<div class="card">
+  <h3>📢 Announcements</h3>
+
+  <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px;">
+
+    <div style="padding:12px; border-radius:12px; background:rgba(255,255,255,0.08); border-left:4px solid #facc15;">
+      <div style="font-size:12px; opacity:0.7;">Today • Important</div>
+      <div style="font-weight:bold;">Library closes at 10:00 PM</div>
+    </div>
+
+    <div style="padding:12px; border-radius:12px; background:rgba(255,255,255,0.08); border-left:4px solid #22c55e;">
+      <div style="font-size:12px; opacity:0.7;">Food • Event</div>
+      <div style="font-weight:bold;">Free hot chocolate at 3:00 PM ☕</div>
+    </div>
+
+    <div style="padding:12px; border-radius:12px; background:rgba(255,255,255,0.08); border-left:4px solid #3b82f6;">
+      <div style="font-size:12px; opacity:0.7;">Update</div>
+      <div style="font-weight:bold;">New group seats added 🎉</div>
+    </div>
+<!-- 🖼️ IMAGE SLIDER (ANNOUNCEMENT VISUALS) -->
+<div class="card">
+  <h3>📸 Library Highlights</h3>
+
+  <div class="slider">
+    <img class="slide active" src="asset/images/clean.jpg">
+    <img class="slide" src="asset/images/hotchocolate.jpeg">
+    <img class="slide" src="asset/images/donations.jpeg">
+  </div>
+</div>
+  </div>
+</div>
+
+  </div>
+
+</div>
+
+<!-- SEATS (FULLY RESTORED) -->
+<div id="seats" class="page">
+
+  <div class="card">
+    <h3>Library Map</h3>
+
+    <div class="map-container" id="map">
+      <img src="asset/images/seat.jpg">
+    </div>
+  </div>
+
+</div>
+
+<!-- PROFILE (UPGRADED, NOT REMOVED) -->
+<div id="profile" class="page">
+
+  <div class="card">
+    <h2>👤 Profile</h2>
+
+    <input id="firstName" placeholder="First Name">
+    <input id="lastName" placeholder="Last Name">
+    <input id="studentId" placeholder="Student ID">
+
+    <input type="password" placeholder="New Password">
+    <input type="file">
+
+    <button class="save" onclick="saveProfile()">Save</button>
+  </div>
+
+</div>
+
+</div>
+
+<script>
+
+function goPage(page) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.getElementById(page).classList.add("active");
+}
+
+/* USER */
+fetch("http://localhost:3000/dashboard", {
+  headers: { Authorization: localStorage.getItem("token") }
+})
+.then(r => r.json())
+.then(d => {
+  document.getElementById("welcome").innerText =
+    "Welcome " + d.user.first_name + " " + d.user.last_name;
+
+  document.getElementById("firstName").value = d.user.first_name;
+  document.getElementById("lastName").value = d.user.last_name;
+  document.getElementById("studentId").value = d.user.student_id;
+});
+
+/* SEATS (RESTORED EXACTLY) */
+function addSeat(id, type, x, y) {
+  const div = document.createElement("div");
+  div.className = "seat " + type;
+  div.innerText = id;
+
+  div.style.left = x + "px";
+  div.style.top = y + "px";
+
+  div.onclick = () => {
+    document.querySelectorAll(".seat").forEach(s => s.classList.remove("selected"));
+    div.classList.add("selected");
+  };
+
+  document.getElementById("map").appendChild(div);
+}
+
+addSeat("M1","meeting",650,145);
+addSeat("M2","meeting",550,120);
+addSeat("G1","group",285,245);
+addSeat("G2","group",400,300);
+addSeat("Q1","quiet",120,400);
+addSeat("Q2","quiet",120,450);
+addSeat("C1","computer",160,200);
+
+/* SAVE PROFILE */
+function saveProfile() {
+  alert("Profile saved (backend not connected yet)");
+}
+
+/* LOGOUT */
+function logout() {
+  localStorage.removeItem("token");
+  window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>
