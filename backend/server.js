@@ -5,18 +5,19 @@ const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const path = require("path");
+const axios = require("axios");
 
 const app = express();
 const SECRET = "library_secret_key";
-const nodemailer = require("nodemailer");
+
+// Put your Hugging Face token here
+const HF_TOKEN = "xhf_xUzCWhHchEityqUHEAhLEaDsAKFmytkiXF";
 
 app.use(cors());
 app.use(bodyParser.json());
 
-// Serve frontend
 app.use(express.static(path.join(__dirname, "../frontend")));
 
-// DB
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -32,7 +33,6 @@ db.connect((err) => {
   console.log("MySQL connected");
 });
 
-/* ================= PASSWORD RULE ================= */
 function isStrongPassword(password) {
   const passwordRule =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
@@ -40,7 +40,6 @@ function isStrongPassword(password) {
   return passwordRule.test(password);
 }
 
-/* ================= TOKEN MIDDLEWARE ================= */
 function verifyToken(req, res, next) {
   const token = req.headers.authorization;
 
@@ -57,7 +56,6 @@ function verifyToken(req, res, next) {
   }
 }
 
-/* ================= ROLE MIDDLEWARE ================= */
 function allowRoles(...roles) {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
@@ -68,7 +66,6 @@ function allowRoles(...roles) {
   };
 }
 
-/* ================= REGISTER ================= */
 app.post("/register", async (req, res) => {
   const { first_name, last_name, email, password, student_id } = req.body;
 
@@ -108,7 +105,6 @@ app.post("/register", async (req, res) => {
   }
 });
 
-/* ================= LOGIN ================= */
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
 
@@ -153,12 +149,8 @@ app.post("/login", (req, res) => {
   });
 });
 
-/* ================= forgot-password ================= */
-
 app.post("/forgot-password", async (req, res) => {
   const { email, student_id, password } = req.body;
-
-  console.log("RESET REQUEST:", email, student_id);
 
   if (!email || !student_id || !password) {
     return res.status(400).json({ message: "Please fill all fields" });
@@ -166,7 +158,8 @@ app.post("/forgot-password", async (req, res) => {
 
   if (!isStrongPassword(password)) {
     return res.status(400).json({
-      message: "Password must be at least 8 characters and include uppercase, lowercase, number, and special character"
+      message:
+        "Password must be at least 8 characters and include uppercase, lowercase, number, and special character"
     });
   }
 
@@ -174,12 +167,7 @@ app.post("/forgot-password", async (req, res) => {
     "SELECT * FROM users WHERE email = ? AND student_id = ?",
     [email, student_id],
     async (err, results) => {
-      if (err) {
-        console.log(err);
-        return res.status(500).json({ message: "Server error" });
-      }
-
-      console.log("MATCHED USERS:", results.length);
+      if (err) return res.status(500).json({ message: "Server error" });
 
       if (results.length === 0) {
         return res.status(404).json({
@@ -194,11 +182,8 @@ app.post("/forgot-password", async (req, res) => {
         [hashedPassword, email, student_id],
         (err, result) => {
           if (err) {
-            console.log(err);
             return res.status(500).json({ message: "Password reset error" });
           }
-
-          console.log("UPDATED ROWS:", result.affectedRows);
 
           if (result.affectedRows === 0) {
             return res.status(400).json({ message: "Password not updated" });
@@ -211,7 +196,52 @@ app.post("/forgot-password", async (req, res) => {
   );
 });
 
-/* ================= DASHBOARD ================= */
+app.post("/ask-ai", async (req, res) => {
+  try {
+    const { message } = req.body;
+
+    if (!message) {
+      return res.json({ reply: "Please type a question." });
+    }
+
+    const response = await axios.post(
+      "https://api-inference.huggingface.co/models/google/flan-t5-base",
+      {
+        inputs: `Answer as a KMUTT library assistant: ${message}`
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${HF_TOKEN}`,
+          "Content-Type": "application/json"
+        }
+      }
+    );
+
+    console.log("HF RESPONSE:", response.data);
+
+    let reply = "";
+
+    if (Array.isArray(response.data)) {
+      reply = response.data[0].generated_text;
+    } else if (response.data.generated_text) {
+      reply = response.data.generated_text;
+    } else if (response.data.error) {
+      reply = response.data.error;
+    } else {
+      reply = "Sorry, I could not answer that.";
+    }
+
+    res.json({ reply: reply });
+
+  } catch (err) {
+    console.log("AI ERROR:", err.response?.data || err.message);
+
+    res.status(500).json({
+      reply: "AI server error. Check backend terminal."
+    });
+  }
+});
+
 app.get("/dashboard", verifyToken, (req, res) => {
   db.query(
     "SELECT id, first_name, last_name, email, student_id, role FROM users WHERE id = ?",
@@ -228,7 +258,6 @@ app.get("/dashboard", verifyToken, (req, res) => {
   );
 });
 
-/* ================= ADMIN: GET ALL USERS ================= */
 app.get("/admin/users", verifyToken, allowRoles("admin"), (req, res) => {
   db.query(
     "SELECT id, first_name, last_name, email, student_id, role FROM users",
@@ -240,7 +269,6 @@ app.get("/admin/users", verifyToken, allowRoles("admin"), (req, res) => {
   );
 });
 
-/* ================= ADMIN: CHANGE USER ROLE ================= */
 app.put("/admin/users/:id/role", verifyToken, allowRoles("admin"), (req, res) => {
   const { role } = req.body;
   const userId = req.params.id;
@@ -260,7 +288,6 @@ app.put("/admin/users/:id/role", verifyToken, allowRoles("admin"), (req, res) =>
   );
 });
 
-/* ================= DISTANCE ================= */
 function distance(lat1, lon1, lat2, lon2) {
   const R = 6371;
   const dLat = ((lat2 - lat1) * Math.PI) / 180;
@@ -275,7 +302,6 @@ function distance(lat1, lon1, lat2, lon2) {
   return 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)) * R;
 }
 
-/* ================= BOOK SEAT ================= */
 app.post("/book-seat", verifyToken, allowRoles("user", "admin"), (req, res) => {
   const { seat_id, activity, lat, lng } = req.body;
 
@@ -305,7 +331,58 @@ app.post("/book-seat", verifyToken, allowRoles("user", "admin"), (req, res) => {
   );
 });
 
-/* ================= START ================= */
+app.post("/check-in", verifyToken, (req, res) => {
+  const { student_id, lat, lng } = req.body;
+
+  if (!student_id || !lat || !lng) {
+    return res.status(400).json({ message: "Missing check-in information" });
+  }
+
+  const libraryLat = 13.6510;
+  const libraryLng = 100.4940;
+
+  const dist = distance(lat, lng, libraryLat, libraryLng);
+
+  if (dist > 0.2) {
+    return res.status(400).json({
+      message: "You are not at the library location"
+    });
+  }
+
+  const sql = `
+    SELECT bookings.id
+    FROM bookings
+    JOIN users ON bookings.user_id = users.id
+    WHERE users.student_id = ?
+    AND bookings.checked_in = false
+    ORDER BY bookings.id DESC
+    LIMIT 1
+  `;
+
+  db.query(sql, [student_id], (err, results) => {
+    if (err) return res.status(500).json({ message: "Database error" });
+
+    if (results.length === 0) {
+      return res.status(404).json({
+        message: "No active booking found for this Student ID"
+      });
+    }
+
+    const bookingId = results[0].id;
+
+    db.query(
+      "UPDATE bookings SET checked_in = true, checked_in_at = NOW() WHERE id = ?",
+      [bookingId],
+      (err) => {
+        if (err) return res.status(500).json({ message: "Check-in error" });
+
+        res.json({ message: "Check-in success" });
+      }
+    );
+  });
+});
+ 
+
 app.listen(3000, () => {
   console.log("Server running on http://localhost:3000");
 });
