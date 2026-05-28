@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const mysql = require("mysql2");
 const bodyParser = require("body-parser");
@@ -9,8 +11,10 @@ const multer = require("multer");
 const fs = require("fs");
 
 const app = express();
-const SECRET = "library_secret_key";
-const LIBRARY = require("../map");
+
+const SECRET = process.env.JWT_SECRET || "library_secret_key";
+const PORT = process.env.PORT || 3000;
+const LIBRARY = require("../map.js");
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -39,19 +43,25 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "library_app"
+const db = mysql.createPool({
+  host: process.env.MYSQLHOST,
+  user: process.env.MYSQLUSER,
+  password: process.env.MYSQLPASSWORD,
+  database: process.env.MYSQLDATABASE,
+  port: Number(process.env.MYSQLPORT || 3306),
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 });
 
-db.connect((err) => {
+db.getConnection((err, connection) => {
   if (err) {
     console.log("MySQL connection error:", err);
     return;
   }
+
   console.log("MySQL connected");
+  connection.release();
 });
 
 function isStrongPassword(password) {
@@ -59,8 +69,15 @@ function isStrongPassword(password) {
 }
 
 function verifyToken(req, res, next) {
-  const token = req.headers.authorization;
-  if (!token) return res.status(401).json({ message: "No token" });
+  let token = req.headers.authorization;
+
+  if (!token) {
+    return res.status(401).json({ message: "No token" });
+  }
+
+  if (token.startsWith("Bearer ")) {
+    token = token.slice(7);
+  }
 
   try {
     req.user = jwt.verify(token, SECRET);
@@ -92,7 +109,9 @@ function formatDateOnly(value) {
 function isWithinNext24Hours(bookingDate, startTime) {
   const now = new Date();
   const max = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-  const bookingStart = new Date(`${bookingDate}T${String(startTime).slice(0, 5)}:00`);
+  const bookingStartText = bookingDate + "T" + String(startTime).slice(0, 5) + ":00";
+  const bookingStart = new Date(bookingStartText);
+
   return bookingStart > now && bookingStart <= max;
 }
 
@@ -104,8 +123,8 @@ function distance(lat1, lon1, lat2, lon2) {
   const a =
     Math.sin(dLat / 2) ** 2 +
     Math.cos((lat1 * Math.PI) / 180) *
-    Math.cos((lat2 * Math.PI) / 180) *
-    Math.sin(dLon / 2) ** 2;
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) ** 2;
 
   return 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)) * R;
 }
@@ -127,6 +146,18 @@ function expireLateBookings(callback) {
   );
 }
 
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/index.html"));
+});
+
+app.get("/index.html", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/index.html"));
+});
+
+app.get("/dashboard.html", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/dashboard.html"));
+});
+
 app.post("/register", async (req, res) => {
   const { first_name, last_name, email, password, student_id } = req.body;
 
@@ -136,7 +167,8 @@ app.post("/register", async (req, res) => {
 
   if (!isStrongPassword(password)) {
     return res.status(400).json({
-      message: "Password must be at least 8 characters and include uppercase, lowercase, number, and special character"
+      message:
+        "Password must be at least 8 characters and include uppercase, lowercase, number, and special character"
     });
   }
 
@@ -151,11 +183,16 @@ app.post("/register", async (req, res) => {
       `,
       [first_name, last_name, email, hashedPassword, student_id, "user"],
       (err) => {
-        if (err) return res.status(400).json({ message: "User already exists" });
+        if (err) {
+          console.log(err);
+          return res.status(400).json({ message: "User already exists" });
+        }
+
         res.json({ message: "Register success" });
       }
     );
-  } catch {
+  } catch (err) {
+    console.log(err);
     res.status(500).json({ message: "Server error" });
   }
 });
@@ -171,13 +208,21 @@ app.post("/login", (req, res) => {
     "SELECT * FROM users WHERE email = ? OR student_id = ?",
     [email, email],
     async (err, results) => {
-      if (err) return res.status(500).json({ message: "Server error" });
-      if (results.length === 0) return res.status(401).json({ message: "User not found" });
+      if (err) {
+        console.log(err);
+        return res.status(500).json({ message: "Server error" });
+      }
+
+      if (results.length === 0) {
+        return res.status(401).json({ message: "User not found" });
+      }
 
       const user = results[0];
       const isMatch = await bcrypt.compare(password, user.password);
 
-      if (!isMatch) return res.status(401).json({ message: "Wrong password" });
+      if (!isMatch) {
+        return res.status(401).json({ message: "Wrong password" });
+      }
 
       const token = jwt.sign(
         {
@@ -205,7 +250,8 @@ app.post("/forgot-password", async (req, res) => {
 
   if (!isStrongPassword(password)) {
     return res.status(400).json({
-      message: "Password must be at least 8 characters and include uppercase, lowercase, number, and special character"
+      message:
+        "Password must be at least 8 characters and include uppercase, lowercase, number, and special character"
     });
   }
 
@@ -226,7 +272,10 @@ app.post("/forgot-password", async (req, res) => {
         [hashedPassword, email, student_id],
         (err, result) => {
           if (err) return res.status(500).json({ message: "Password reset error" });
-          if (result.affectedRows === 0) return res.status(400).json({ message: "Password not updated" });
+          if (result.affectedRows === 0) {
+            return res.status(400).json({ message: "Password not updated" });
+          }
+
           res.json({ message: "Password reset success" });
         }
       );
@@ -239,8 +288,12 @@ app.get("/dashboard", verifyToken, (req, res) => {
     "SELECT id, first_name, last_name, email, student_id, role, profile_image FROM users WHERE id = ?",
     [req.user.id],
     (err, results) => {
-      if (err) return res.status(500).json({ message: "DB error" });
+      if (err) {
+      console.log("Dashboard DB error:", err);
+      return res.status(500).json({ message: err.message });
+    }
       if (results.length === 0) return res.status(404).json({ message: "User not found" });
+
       res.json({ user: results[0] });
     }
   );
@@ -365,8 +418,13 @@ app.post("/check-in", verifyToken, (req, res) => {
         const startDateTime = new Date(`${dateOnly}T${startOnly}:00`);
         const now = new Date();
 
-        const earliestCheckIn = new Date(startDateTime.getTime() - LIBRARY.earlyCheckInMinutes * 60 * 1000);
-        const latestCheckIn = new Date(startDateTime.getTime() + LIBRARY.lateLimitMinutes * 60 * 1000);
+        const earliestCheckIn = new Date(
+          startDateTime.getTime() - LIBRARY.earlyCheckInMinutes * 60 * 1000
+        );
+
+        const latestCheckIn = new Date(
+          startDateTime.getTime() + LIBRARY.lateLimitMinutes * 60 * 1000
+        );
 
         if (now < earliestCheckIn) {
           return res.status(400).json({
@@ -661,7 +719,9 @@ app.delete("/bookings/:id/cancel", verifyToken, (req, res) => {
       const startDateTime = new Date(`${dateOnly}T${startOnly}:00`);
 
       if (new Date() >= startDateTime) {
-        return res.status(400).json({ message: "You can only cancel before the booking start time" });
+        return res.status(400).json({
+          message: "You can only cancel before the booking start time"
+        });
       }
 
       db.query(
@@ -676,6 +736,6 @@ app.delete("/bookings/:id/cancel", verifyToken, (req, res) => {
   );
 });
 
-app.listen(3000, () => {
-  console.log("Server running on http://localhost:3000");
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
