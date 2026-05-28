@@ -871,7 +871,7 @@ function overlaps(start, end, bookedStart, bookedEnd) {
 function isPastOrMoreThan24Hours(date, time) {
   const now = new Date();
   const max = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-  const selected = new Date(`${date}T${time}:00`);
+  const selected = new Date(`${date}T${time}:00+07:00`);
   return selected <= now || selected > max;
 }
 
@@ -1231,7 +1231,7 @@ function onStartTimeChange() {
     if (duration > 240) break;
     if (duration > userRemainingMinutes) break;
 
-    const endDateTime = new Date(`${date}T${end}:00`);
+    const endDateTime = new Date(`${date}T${end}:00+07:00`);
     const now = new Date();
     const max = new Date(now.getTime() + 24 * 60 * 60 * 1000);
 
@@ -1417,8 +1417,12 @@ function loadHistory() {
       box.innerHTML = data.history.map(item => {
         const dateOnly = String(item.booking_date).split("T")[0];
         const startOnly = String(item.start_time).slice(0, 5);
-        const startDateTime = new Date(`${dateOnly}T${startOnly}:00`);
-        const canCancel = new Date() < startDateTime;
+        const startDateTime = new Date(`${dateOnly}T${startOnly}:00+07:00`);
+        const nowBangkok = new Date(
+          new Date().toLocaleString("en-US", { timeZone: "Asia/Bangkok" })
+        );
+
+        const canCancel = nowBangkok < startDateTime;
 
         return `
           <div class="summary-box">
@@ -1648,7 +1652,7 @@ function loadCheckInBookings() {
             const startOnly = String(booking.start_time).slice(0, 5);
             const endOnly = String(booking.end_time).slice(0, 5);
 
-            const startDateTime = new Date(`${dateOnly}T${startOnly}:00`);
+            const startDateTime = new Date(`${dateOnly}T${startOnly}:00+07:00`);
             const earliest = new Date(
               startDateTime.getTime() -
                 LIBRARY_CONFIG.earlyCheckInMinutes * 60 * 1000
@@ -1750,7 +1754,7 @@ function loadNextBookingMessage() {
             ...item,
             dateOnly,
             startOnly,
-            startDateTime: new Date(`${dateOnly}T${startOnly}:00`)
+            startDateTime: new Date(`${dateOnly}T${startOnly}:00+07:00`)
           };
         })
         .filter(item => item.startDateTime > now)

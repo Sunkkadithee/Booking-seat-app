@@ -1,3 +1,4 @@
+process.env.TZ = "Asia/Bangkok";
 require("dotenv").config();
 
 const express = require("express");
@@ -49,6 +50,7 @@ const db = mysql.createPool({
   password: process.env.MYSQLPASSWORD,
   database: process.env.MYSQLDATABASE,
   port: Number(process.env.MYSQLPORT || 3306),
+  timezone: "+07:00",
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
@@ -109,7 +111,7 @@ function formatDateOnly(value) {
 function isWithinNext24Hours(bookingDate, startTime) {
   const now = new Date();
   const max = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-  const bookingStartText = bookingDate + "T" + String(startTime).slice(0, 5) + ":00";
+  const bookingStartText = bookingDate + "T" + String(startTime).slice(0, 5) + ":00+07:00";
   const bookingStart = new Date(bookingStartText);
 
   return bookingStart > now && bookingStart <= max;
@@ -357,8 +359,8 @@ app.get("/check-in/bookings", verifyToken, (req, res) => {
       FROM bookings
       WHERE user_id = ?
       AND checked_in = false
-      AND booking_date = CURDATE()
-      AND CONCAT(booking_date, ' ', end_time) >= NOW()
+      AND booking_date = DATE(CONVERT_TZ(NOW(), '+00:00', '+07:00'))
+      AND CONCAT(booking_date, ' ', end_time) >= CONVERT_TZ(NOW(), '+00:00', '+07:00')
       ORDER BY start_time ASC
       `,
       [req.user.id],
@@ -415,7 +417,7 @@ app.post("/check-in", verifyToken, (req, res) => {
         const booking = results[0];
         const dateOnly = formatDateOnly(booking.booking_date);
         const startOnly = String(booking.start_time).slice(0, 5);
-        const startDateTime = new Date(`${dateOnly}T${startOnly}:00`);
+        const startDateTime = new Date(`${dateOnly}T${startOnly}:00+07:00`);
         const now = new Date();
 
         const earliestCheckIn = new Date(
@@ -716,7 +718,7 @@ app.delete("/bookings/:id/cancel", verifyToken, (req, res) => {
       const booking = results[0];
       const dateOnly = formatDateOnly(booking.booking_date);
       const startOnly = String(booking.start_time).slice(0, 5);
-      const startDateTime = new Date(`${dateOnly}T${startOnly}:00`);
+      const startDateTime = new Date(`${dateOnly}T${startOnly}:00+07:00`);
 
       if (new Date() >= startDateTime) {
         return res.status(400).json({
