@@ -194,6 +194,10 @@ body {
 .stat-card h2 { margin: 0; color: #ff4325; }
 .stat-card p { margin: 6px 0 0; color: #64748b; }
 
+.cancel-btn:disabled {
+  background: #cbd5e1;
+  cursor: not-allowed;
+}
 .announcement {
   padding: 14px;
   border-radius: 14px;
@@ -1415,14 +1419,11 @@ function loadHistory() {
       }
 
       box.innerHTML = data.history.map(item => {
-        const dateOnly = String(item.booking_date).split("T")[0];
-        const startOnly = String(item.start_time).slice(0, 5);
-        const startDateTime = new Date(`${dateOnly}T${startOnly}:00+07:00`);
-        const nowBangkok = new Date(
-          new Date().toLocaleString("en-US", { timeZone: "Asia/Bangkok" })
-        );
-
-        const canCancel = nowBangkok < startDateTime;
+          const dateOnly = String(item.booking_date).slice(0, 10);
+          const startOnly = String(item.start_time).slice(0, 5);
+          const startDateTime = new Date(`${dateOnly}T${startOnly}:00+07:00`);
+          const cancelDeadline = new Date(startDateTime.getTime() - 30 * 60 * 1000);
+          const canCancel = new Date() < cancelDeadline;
 
         return `
           <div class="summary-box">
@@ -1432,10 +1433,18 @@ function loadHistory() {
             <small>Start: ${String(item.start_time).slice(0, 5)}</small>
             <small>End: ${String(item.end_time).slice(0, 5)}</small>
 
+            <button
+              class="cancel-btn"
+              onclick="cancelBooking(${item.id})"
+              ${canCancel ? "" : "disabled"}
+            >
+              Cancel Booking
+            </button>
+
             ${
               canCancel
-                ? `<button class="cancel-btn" onclick="cancelBooking(${item.id})">Cancel Booking</button>`
-                : `<small style="color:#64748b;">Cannot cancel after start time</small>`
+                ? ""
+                : `<small style="color:#64748b;">Cannot cancel within 30 minutes before start time</small>`
             }
           </div>
         `;

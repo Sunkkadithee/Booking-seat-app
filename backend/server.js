@@ -685,12 +685,21 @@ app.get("/history", verifyToken, (req, res) => {
 
     db.query(
       `
-      SELECT id, seat_id, activity, booking_date, start_time, end_time, duration_hours, checked_in, created_at
+      SELECT 
+        id, 
+        seat_id, 
+        activity,
+        DATE_FORMAT(booking_date, '%Y-%m-%d') AS booking_date,
+        TIME_FORMAT(start_time, '%H:%i') AS start_time,
+        TIME_FORMAT(end_time, '%H:%i') AS end_time,
+        duration_hours,
+        checked_in,
+        created_at
       FROM bookings
       WHERE user_id = ?
       ORDER BY booking_date DESC, start_time DESC
       `,
-      [req.user.id],
+  [req.user.id],
       (err, results) => {
         if (err) return res.status(500).json({ message: "History load error" });
         res.json({ history: results });
@@ -702,7 +711,10 @@ app.get("/history", verifyToken, (req, res) => {
 app.delete("/bookings/:id/cancel", verifyToken, (req, res) => {
   db.query(
     `
-    SELECT *
+    SELECT 
+      id,
+      DATE_FORMAT(booking_date, '%Y-%m-%d') AS booking_date,
+      TIME_FORMAT(start_time, '%H:%i') AS start_time
     FROM bookings
     WHERE id = ?
     AND user_id = ?
@@ -716,13 +728,26 @@ app.delete("/bookings/:id/cancel", verifyToken, (req, res) => {
       }
 
       const booking = results[0];
-      const dateOnly = formatDateOnly(booking.booking_date);
-      const startOnly = String(booking.start_time).slice(0, 5);
-      const startDateTime = new Date(`${dateOnly}T${startOnly}:00+07:00`);
 
-      if (new Date() >= startDateTime) {
+      const startDateTime = new Date(
+        `${booking.booking_date}T${booking.start_time}:00+07:00`
+      );
+
+      const cancelDeadline = new Date(
+        startDateTime.getTime() - 30 * 60 * 1000
+      );
+
+      console.log("CANCEL DEBUG:", {
+        booking_date: booking.booking_date,
+        start_time: booking.start_time,
+        startDateTime,
+        cancelDeadline,
+        now: new Date()
+      });
+
+      if (new Date() >= cancelDeadline) {
         return res.status(400).json({
-          message: "You can only cancel before the booking start time"
+          message: "You can only cancel until 30 minutes before the booking starts"
         });
       }
 
