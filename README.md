@@ -63,6 +63,8 @@ CREATE TABLE bookings (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+4.ALTER TABLE users ADD profile_image VARCHAR(255);
+
 note:  SHOW TABLES;
        SELECT * FROM seats;
        SELECT * FROM users;
