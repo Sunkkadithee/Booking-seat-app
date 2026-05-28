@@ -722,35 +722,43 @@ function register() {
 }
 
 function login() {
-  fetch("http://localhost:3000/login", {
+  console.log("Login button clicked");
+
+  fetch("/login", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify({
       email: document.getElementById("loginIdentifier").value,
       password: document.getElementById("loginPassword").value
     })
   })
-  .then(res => res.json())
+  .then(res => {
+    console.log("Login response received");
+    return res.json();
+  })
   .then(data => {
+    console.log("Login data:", data);
+
     if (!data.token) {
+      console.log("No token returned");
       showMsg(data.message, "error");
       return;
     }
 
+    console.log("Saving token...");
+
     localStorage.setItem("token", data.token);
-    localStorage.setItem("role", data.role);
+    localStorage.setItem("role", data.role || "user");
 
-    showMsg("Login success");
+    console.log("Token saved:", localStorage.getItem("token"));
+    console.log("Redirecting to dashboard...");
 
-    setTimeout(() => {
-      if (data.role === "admin") {
-        window.location.href = "dashboard.html";
-      } else {
-        window.location.href = "dashboard.html";
-      }
-    }, 800);
+    window.location.href = "/dashboard.html";
   })
-  .catch(() => {
+  .catch(err => {
+    console.log("Login error:", err);
     showMsg("Cannot connect to server", "error");
   });
 }

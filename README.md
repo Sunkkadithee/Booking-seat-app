@@ -11,6 +11,7 @@ setup
 
 1. data base
 1.1
+
 USE library_app;
 
 CREATE TABLE users (
@@ -29,6 +30,7 @@ CREATE TABLE users (
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
 1.2
 CREATE TABLE seats (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -72,11 +74,19 @@ note:  SHOW TABLES;
        DESCRIBE bookings;
 
 
-2. back up  run : 
-node server.js
 
-cd library-app/backend
+update to be admin
+
+UPDATE users
+SET role = 'admin'
+WHERE email = 'pang@test.com';
+
+2. back up  run : 
+
+-------------
+cd backend
+node -v
 npm install
 node server.js
-
+--------------
 3. font end run:  frontend/index.html 

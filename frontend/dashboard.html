@@ -1502,13 +1502,29 @@ function goPage(page, element) {
   }
 }
 
-fetch("http://localhost:3000/dashboard", {
-  headers: { Authorization: localStorage.getItem("token") }
+
+console.log("Dashboard loaded");
+
+const token = localStorage.getItem("token");
+
+console.log("Token from localStorage:", token);
+
+if (!token) {
+  console.log("No token found -> redirect login");
+  window.location.href = "/index.html";
+}
+
+fetch("/dashboard", {
+  headers: { Authorization: token }
 })
 .then(r => r.json())
 .then(d => {
+   console.log("Dashboard response:", d);
   if (!d.user) {
-    window.location.href = "index.html";
+    console.log("No user returned, going back to login");
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    window.location.href = "/index.html";
     return;
   }
 
@@ -1802,7 +1818,7 @@ function confirmCheckIn(bookingId) {
 function logout() {
   localStorage.removeItem("token");
   localStorage.removeItem("role");
-  window.location.href = "index.html";
+  window.location.href = "/index.html";
 }
 </script>
 
