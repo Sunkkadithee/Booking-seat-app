@@ -5,6 +5,8 @@ const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const path = require("path");
+const multer = require("multer");
+const fs = require("fs");
 
 const app = express();
 const SECRET = "library_secret_key";
@@ -13,9 +15,29 @@ const LIBRARY = require("../map");
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "../frontend")));
+
 app.get("/map.js", (req, res) => {
   res.sendFile(path.join(__dirname, "../map.js"));
 });
+
+const uploadDir = path.join(__dirname, "uploads");
+
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
+
+app.use("/uploads", express.static(uploadDir));
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    cb(null, "user-" + req.user.id + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ storage });
 
 const db = mysql.createConnection({
   host: "localhost",
@@ -214,12 +236,33 @@ app.post("/forgot-password", async (req, res) => {
 
 app.get("/dashboard", verifyToken, (req, res) => {
   db.query(
-    "SELECT id, first_name, last_name, email, student_id, role FROM users WHERE id = ?",
+    "SELECT id, first_name, last_name, email, student_id, role, profile_image FROM users WHERE id = ?",
     [req.user.id],
     (err, results) => {
       if (err) return res.status(500).json({ message: "DB error" });
       if (results.length === 0) return res.status(404).json({ message: "User not found" });
       res.json({ user: results[0] });
+    }
+  );
+});
+
+app.post("/profile-picture", verifyToken, upload.single("profileImage"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: "No image uploaded" });
+  }
+
+  const imagePath = "/uploads/" + req.file.filename;
+
+  db.query(
+    "UPDATE users SET profile_image = ? WHERE id = ?",
+    [imagePath, req.user.id],
+    (err) => {
+      if (err) return res.status(500).json({ message: "Profile image update error" });
+
+      res.json({
+        message: "Profile picture updated",
+        profile_image: imagePath
+      });
     }
   );
 });
