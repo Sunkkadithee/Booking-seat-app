@@ -1,14 +1,14 @@
 const LIBRARY_CONFIG = {
-  name: "40 Orchard View Blvd, Toronto",
+  name: "91 Phutthabucha Rd, Bang Mot, Thung Khru, Bangkok 10140, Thailand",
 
-  lat: 43.7082733,
-  lng: -79.3999995,
+  lat: 13.6517,
+  lng: 100.4899,
 
   checkInRadiusKm: 0.5,
   checkInRadiusMeters: 500,
 
   earlyCheckInMinutes: 30,
-
+  
   lateLimitMinutes: 15
 };
 
