@@ -3,15 +3,15 @@
 <head>
 <title>Clear Library Dashboard</title>
 
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <style>
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #f8fafc;
+  background: #fff1ed9d;
   color: #172033;
   height: 100vh;
   display: flex;
@@ -48,17 +48,8 @@ body {
   box-shadow: 0 8px 18px rgba(255, 67, 37, 0.28);
 }
 
-.brand-box h2 {
-  margin: 0;
-  font-size: 24px;
-  line-height: 1.1;
-}
-
-.brand-box p {
-  margin: 5px 0 0;
-  color: #64748b;
-  font-size: 13px;
-}
+.brand-box h2 { margin: 0; font-size: 24px; line-height: 1.1; }
+.brand-box p { margin: 5px 0 0; color: #64748b; font-size: 13px; }
 
 .user-box {
   padding: 24px;
@@ -84,33 +75,8 @@ body {
   font-size: 22px;
 }
 
-.user-name {
-  font-weight: bold;
-  font-size: 16px;
-}
-
-.user-id {
-  color: #64748b;
-  margin-top: 4px;
-}
-
-.status-card {
-  background: #eafaf1;
-  border: 1px solid #bbf7d0;
-  border-radius: 16px;
-  padding: 14px;
-  color: #172033;
-}
-
-.status-card strong {
-  display: block;
-  margin-bottom: 6px;
-}
-
-.status-card span {
-  color: #52657f;
-  font-size: 13px;
-}
+.user-name { font-weight: bold; font-size: 16px; }
+.user-id { color: #64748b; margin-top: 4px; }
 
 .menu {
   padding: 28px 16px;
@@ -150,9 +116,7 @@ body {
   cursor: pointer;
 }
 
-.logout-btn:hover {
-  background: #dc2626;
-}
+.logout-btn:hover { background: #dc2626; }
 
 .sidebar-footer {
   text-align: center;
@@ -191,16 +155,8 @@ body {
   justify-content: center;
 }
 
-.topbar h1 {
-  margin: 0;
-  font-size: 24px;
-}
-
-.topbar p {
-  margin: 5px 0 0;
-  color: #64748b;
-  font-size: 14px;
-}
+.topbar h1 { margin: 0; font-size: 24px; }
+.topbar p { margin: 5px 0 0; color: #64748b; font-size: 14px; }
 
 .content {
   flex: 1;
@@ -208,13 +164,8 @@ body {
   padding: 34px;
 }
 
-.page {
-  display: none;
-}
-
-.page.active {
-  display: block;
-}
+.page { display: none; }
+.page.active { display: block; }
 
 .card {
   background: white;
@@ -240,15 +191,8 @@ body {
   padding: 18px;
 }
 
-.stat-card h2 {
-  margin: 0;
-  color: #ff4325;
-}
-
-.stat-card p {
-  margin: 6px 0 0;
-  color: #64748b;
-}
+.stat-card h2 { margin: 0; color: #ff4325; }
+.stat-card p { margin: 6px 0 0; color: #64748b; }
 
 .announcement {
   padding: 14px;
@@ -270,80 +214,6 @@ body {
   border-radius: 14px;
 }
 
-/* AI PAGE */
-.ai-page {
-  max-width: 1030px;
-}
-
-.chat-row {
-  display: flex;
-  margin-bottom: 24px;
-}
-
-.chat-row.user {
-  justify-content: flex-end;
-}
-
-.bubble {
-  max-width: 680px;
-  padding: 18px 24px;
-  border-radius: 14px;
-  line-height: 1.6;
-  font-size: 16px;
-}
-
-.bubble.ai {
-  background: #f8fafc;
-  border: 1px solid #dbe3ef;
-  color: #172033;
-}
-
-.bubble.user {
-  background: linear-gradient(135deg, #ff4325, #ff663d);
-  color: white;
-}
-
-.recommend-card {
-  max-width: 670px;
-  background: white;
-  border: 1px solid #dbe3ef;
-  border-radius: 16px;
-  overflow: hidden;
-}
-
-.recommend-head {
-  background: linear-gradient(135deg, #ff4325, #ff663d);
-  color: white;
-  padding: 22px 26px;
-}
-
-.recommend-body {
-  padding: 24px;
-}
-
-.tags {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 24px;
-}
-
-.tag {
-  border: 1px solid #dbe3ef;
-  padding: 9px 14px;
-  border-radius: 999px;
-  font-size: 14px;
-  background: #f8fafc;
-}
-
-.info-box {
-  border: 1px solid #dbe3ef;
-  background: #f8fafc;
-  border-radius: 14px;
-  padding: 20px;
-  margin-bottom: 24px;
-}
-
 .book-btn {
   width: 100%;
   border: none;
@@ -356,90 +226,36 @@ body {
   cursor: pointer;
 }
 
-.chat-input-area {
-  background: #ffffff;
-  border-top: 1px solid #e2e8f0;
-  padding: 24px 34px;
-}
-
-.chat-input-box {
-  max-width: 900px;
-  display: flex;
-  margin: auto;
-  border: 1px solid #dbe3ef;
-  border-radius: 16px;
-  overflow: hidden;
-  background: #f8fafc;
-}
-
-.chat-input-box input {
-  flex: 1;
-  border: none;
-  background: transparent;
-  padding: 18px 24px;
-  font-size: 15px;
-  outline: none;
-}
-
-.send-btn {
-  width: 44px;
-  height: 44px;
-  margin: 8px;
-  border: none;
-  border-radius: 14px;
-  background: #ff4325;
-  color: white;
-  cursor: pointer;
-}
-
-.suggestions {
-  max-width: 900px;
-  margin: 14px auto 0;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: #94a3b8;
-  font-size: 13px;
-}
-
-.suggestions span {
-  border: 1px solid #dbe3ef;
-  border-radius: 999px;
-  padding: 8px 14px;
-  color: #52657f;
-  background: white;
-  cursor: pointer;
-}
-
-/* SEAT MAP */
 .seat-layout {
   display: grid;
-  grid-template-columns: 1fr 320px;
+  grid-template-columns: minmax(0, 1fr) 320px;
   gap: 24px;
+  align-items: start;
 }
 
 .map-container {
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
+  width: 900px;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0;
 }
 
 .map-container img {
-  max-width: 900px;
-  width: 100%;
+  width: 900px;
+  max-width: 100%;
+  display: block;
   border-radius: 16px;
+  pointer-events: none;
 }
 
-#map {
-  position: relative;
-}
+#map { position: relative; }
 
 .seat {
   position: absolute;
-  width: 25px;
-  height: 25px;
+  transform: translate(-50%, -50%);
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   font-size: 10px;
   display: flex;
@@ -449,16 +265,24 @@ body {
   color: black;
   font-weight: bold;
   z-index: 10;
+  border: 2px solid white;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.25);
 }
 
 .group { background: #22c55e; }
-.meeting { background: #3b82f6; }
+.meeting { background: #3b82f6; color: white; }
 .quiet { background: #facc15; }
-.computer { background: #a855f7; }
+.computer { background: #a855f7; color: white; }
 
-.selected {
-  outline: 3px solid #ff4325;
+.seat.booked {
+  background: #9ca3af !important;
+  color: white !important;
+  opacity: 0.7;
+  cursor: not-allowed;
 }
+
+.selected { outline: 3px solid #ff4325; }
+.seat.new-seat { outline: 3px dashed #ff4325; }
 
 .summary-box {
   background: #fff3f1;
@@ -473,9 +297,7 @@ body {
   margin-bottom: 8px;
 }
 
-.summary-box strong {
-  display: block;
-}
+.summary-box strong { display: block; }
 
 .confirm-btn {
   width: 100%;
@@ -484,6 +306,18 @@ body {
   border: none;
   border-radius: 12px;
   background: #ff4325;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  background: #ef4444;
   color: white;
   font-weight: bold;
   cursor: pointer;
@@ -500,13 +334,69 @@ body {
   top: 20px;
 }
 
-input {
+.time-error {
+  display: none;
+  color: #dc2626;
+  font-size: 13px;
+  font-weight: bold;
+  margin-top: 8px;
+}
+
+.time-success {
+  display: none;
+  color: #16a34a;
+  font-size: 13px;
+  font-weight: bold;
+  margin-top: 8px;
+}
+
+input,
+select {
   width: 100%;
-  padding: 12px;
-  margin: 8px 0;
-  border-radius: 10px;
+  padding: 14px 16px;
+  margin: 10px 0;
+  border-radius: 14px;
   border: 1px solid #dbe3ef;
   outline: none;
+  background: #f8fafc;
+  font-size: 15px;
+  font-weight: 500;
+  color: #172033;
+  transition: all 0.2s ease;
+}
+
+input:focus,
+select:focus {
+  border-color: #ff4325;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(255, 67, 37, 0.12);
+}
+
+select {
+  appearance: none;
+  cursor: pointer;
+  background-image:
+    linear-gradient(45deg, transparent 50%, #64748b 50%),
+    linear-gradient(135deg, #64748b 50%, transparent 50%);
+  background-position:
+    calc(100% - 22px) calc(50% - 3px),
+    calc(100% - 16px) calc(50% - 3px);
+  background-size: 6px 6px;
+  background-repeat: no-repeat;
+}
+
+#adminSeatControls {
+  margin-top: 22px;
+  padding: 22px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+}
+
+#adminSeatControls h3 {
+  margin-top: 0;
+  margin-bottom: 14px;
+  font-size: 18px;
 }
 
 button.save {
@@ -540,11 +430,6 @@ button.save {
         <div class="user-id">ID: <span id="sideStudentId">-</span></div>
       </div>
     </div>
-
-    <div class="status-card">
-      <strong>✓ Good Standing</strong>
-      <span>0 Penalty Points</span>
-    </div>
   </div>
 
   <div class="menu">
@@ -556,7 +441,6 @@ button.save {
   </div>
 
   <button class="logout-btn" onclick="logout()">Logout</button>
-
   <div class="sidebar-footer">© 2026 KMUTT Library</div>
 </div>
 
@@ -578,30 +462,11 @@ button.save {
       </div>
 
       <div class="card">
-        <h2>🤖 Book Assistant</h2>
-        <p>
-          Describe your study needs and Clear AI will recommend the best seat for you.
-          <span onclick="goPage('assistant', document.querySelectorAll('.menu-item')[1])" style="color:#ff4325;font-weight:bold;cursor:pointer;margin-left:6px;">
-            Click here →
-          </span>
-        </p>
-      </div>
-
-      <div class="card">
         <h3>📊 Live Stats</h3>
         <div class="stats-grid">
-          <div class="stat-card">
-            <h2>6</h2>
-            <p>Available</p>
-          </div>
-          <div class="stat-card">
-            <h2>2</h2>
-            <p>Booked</p>
-          </div>
-          <div class="stat-card">
-            <h2>8</h2>
-            <p>Total</p>
-          </div>
+          <div class="stat-card"><h2>6</h2><p>Available</p></div>
+          <div class="stat-card"><h2>2</h2><p>Booked</p></div>
+          <div class="stat-card"><h2>8</h2><p>Total</p></div>
         </div>
       </div>
 
@@ -631,68 +496,118 @@ button.save {
       </div>
     </div>
 
-  <div id="checkin" class="page">
+    <div id="checkin" class="page">
     <div class="card">
       <h2>📍 Library Check In</h2>
-      <p>Enter your Student ID. You can check in only if you have a booking and you are at the library.</p>
+      <p>
+        View today’s bookings below. You can confirm check-in from 30 minutes before your booking time
+        until 15 minutes after, only if you are within 500m of the library.
+      </p>
 
-      <input id="checkinStudentId" placeholder="Enter Student ID">
+      <p id="locationStatus" style="font-weight:bold; margin-top:12px;">
+        Checking your location...
+      </p>
 
-      <button class="book-btn" onclick="checkIn()">
-        Check In Now
-      </button>
+      <div
+        id="checkinMap"
+        style="width:100%; height:360px; border-radius:16px; margin-top:18px;"
+      ></div>
+
+      <h3 style="margin-top:24px;">Today’s Bookings</h3>
+      <div id="checkinBookingList" style="margin-top:18px;">
+        Loading bookings...
+      </div>
     </div>
   </div>
 
     <div id="seats" class="page">
+      <div class="card">
+        <h2>Reserve Your Seat</h2>
+        <p style="color:#64748b;">Select date first, then select a seat. Booked times will disappear from the dropdown.</p>
+      </div>
+
       <div class="seat-layout">
 
-        <div>
-          <div class="card">
-            <h2>Reserve Your Seat</h2>
-            <p style="color:#64748b;">Select your preferred seat from the library floor map.</p>
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <h3>Library Floor Map</h3>
+            <div style="display:flex; gap:14px; font-size:13px; color:#64748b;">
+              <span>🟢 Group</span>
+              <span>🔵 Meeting</span>
+              <span>🟡 Quiet</span>
+              <span>🟣 Computer</span>
+            </div>
           </div>
 
-          <div class="card">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-              <h3>Library Floor Map</h3>
-              <div style="display:flex; gap:14px; font-size:13px; color:#64748b;">
-                <span>🟢 Group</span>
-                <span>🔵 Meeting</span>
-                <span>🟡 Quiet</span>
-                <span>🟣 Computer</span>
-              </div>
-            </div>
+          <div class="map-container" id="map">
+            <img src="asset/images/seat.jpg">
+          </div>
 
-            <div class="map-container" id="map">
-              <img src="asset/images/seat.jpg">
-            </div>
+          <div id="adminSeatControls" style="display:none;">
+            <h3>Admin Seat Editor</h3>
+
+            <button class="book-btn" onclick="startNewSeat()">Add New Seat</button>
+
+            <input id="editSeatName" placeholder="Seat name e.g. G1" oninput="previewSeatInfo()">
+
+            <select id="editSeatType" onchange="previewSeatInfo()">
+              <option value="">Select zone</option>
+              <option value="group">Group</option>
+              <option value="meeting">Meeting</option>
+              <option value="quiet">Quiet</option>
+              <option value="computer">Computer</option>
+            </select>
+
+            <button class="confirm-btn" onclick="saveSeat()">Save Seat</button>
+            <button class="logout-btn" style="margin:10px 0 0; width:100%;" onclick="deleteSelectedSeat()">Delete Selected Seat</button>
+
+            <p id="seatCoords" style="font-weight:bold; color:#ff4325;"></p>
           </div>
         </div>
 
-        <div>
-          <div class="card summary-card">
-            <h3>Booking Summary</h3>
+        <div class="card summary-card">
+          <h3>Booking Summary</h3>
 
-            <div class="summary-box">
-              <small>Selected Seat</small>
-              <strong id="selectedSeatText">No seat selected</strong>
-            </div>
-
-            <div class="summary-box">
-              <small>Zone</small>
-              <strong id="selectedZoneText">-</strong>
-            </div>
-
-            <div class="summary-box">
-              <small>Status</small>
-              <strong style="color:#22c55e;">Available</strong>
-            </div>
-
-            <button id="confirmBtn" class="confirm-btn" onclick="bookSelectedSeat()" disabled>
-              📖 Continue to Confirmation
-            </button>
+          <div class="summary-box">
+            <small>Selected Seat</small>
+            <strong id="selectedSeatText">No seat selected</strong>
           </div>
+
+          <div class="summary-box">
+            <small>Zone</small>
+            <strong id="selectedZoneText">-</strong>
+          </div>
+
+          <div class="summary-box">
+            <small>Status</small>
+            <strong id="selectedStatusText" style="color:#22c55e;">Available</strong>
+          </div>
+
+          <div class="summary-box">
+            <small>Date</small>
+            <input id="bookingDate" type="date" onchange="loadAvailableTimes()">
+          </div>
+
+          <div class="summary-box">
+            <small>Start Time</small>
+            <select id="startTime" onchange="onStartTimeChange()">
+              <option value="">Select date and seat first</option>
+            </select>
+          </div>
+
+          <div class="summary-box">
+            <small>End Time</small>
+            <select id="endTime" onchange="validateBookingTime()">
+              <option value="">Select start time first</option>
+            </select>
+
+            <p id="timeError" class="time-error">Limit time is 4 hours per day.</p>
+            <p id="timeSuccess" class="time-success">Time selected successfully.</p>
+          </div>
+
+          <button id="confirmBtn" class="confirm-btn" onclick="bookSelectedSeat()" disabled>
+            📖 Continue to Confirmation
+          </button>
         </div>
 
       </div>
@@ -713,30 +628,620 @@ button.save {
     <div id="history" class="page">
       <div class="card">
         <h2>🕘 History</h2>
-        <p>No booking history yet.</p>
+        <div id="historyList">No booking history yet.</div>
       </div>
     </div>
 
   </div>
-
-  <div class="chat-input-area" id="aiInputArea" style="display:none;">
-    <div class="chat-input-box">
-      <input id="aiQuestion" placeholder="Ask Clear AI to find a book or seat..." onkeydown="if(event.key === 'Enter') askAI()">
-      <button class="send-btn" onclick="askAI()">➤</button>
-    </div>
-
-    <div class="suggestions">
-      Try asking:
-      <span onclick="quickAsk('Where can I find database books?')">Database books</span>
-      <span onclick="quickAsk('I need books about marketing')">Marketing books</span>
-      <span onclick="quickAsk('Find me a quiet seat near power outlets')">Quiet seat</span>
-    </div>
-  </div>
 </div>
 
+<script src="/map.js"></script>
 <script>
+let selectedSeatDbId = null;
 let selectedSeatId = null;
 let selectedSeatType = null;
+let selectedSeatStatus = null;
+let currentUserRole = localStorage.getItem("role");
+
+let newSeatX = null;
+let newSeatY = null;
+let isAddingSeat = false;
+
+const ALL_TIMES = [
+  "09:00",
+  "10:00",
+  "11:00",
+  "12:00",
+  "13:00",
+  "14:00",
+  "15:00",
+  "16:00",
+  "17:00",
+  "18:00",
+  "19:00",
+  "20:00"
+];
+
+let seatBookedTimes = [];
+let userUsedMinutes = 0;
+let userRemainingMinutes = 240;
+
+function localDateString(date) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
+function timeToMinutes(time) {
+  const parts = String(time).slice(0, 5).split(":");
+  return Number(parts[0]) * 60 + Number(parts[1]);
+}
+
+function timeLabel(time) {
+  const [h, m] = time.split(":").map(Number);
+  const suffix = h >= 12 ? "PM" : "AM";
+  const hour = h % 12 || 12;
+  return `${String(hour).padStart(2, "0")}:${String(m).padStart(2, "0")} ${suffix}`;
+}
+
+function overlaps(start, end, bookedStart, bookedEnd) {
+  return !(end <= bookedStart || start >= bookedEnd);
+}
+
+function isPastOrMoreThan24Hours(date, time) {
+  const now = new Date();
+  const max = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+  const selected = new Date(`${date}T${time}:00`);
+  return selected <= now || selected > max;
+}
+
+function clearTimeDropdowns() {
+  document.getElementById("startTime").innerHTML =
+    `<option value="">Select date and seat first</option>`;
+
+  document.getElementById("endTime").innerHTML =
+    `<option value="">Select start time first</option>`;
+}
+
+function startNewSeat() {
+  isAddingSeat = true;
+  selectedSeatDbId = null;
+  selectedSeatId = null;
+  selectedSeatType = null;
+  selectedSeatStatus = "available";
+
+  document.getElementById("editSeatName").value = "";
+  document.getElementById("editSeatType").value = "";
+  document.getElementById("seatCoords").innerText = "Click anywhere on the map to place the new seat.";
+
+  document.querySelectorAll(".seat").forEach(s => s.classList.remove("selected"));
+}
+
+function previewSeatInfo() {
+  const name = document.getElementById("editSeatName").value.trim() || "?";
+  const type = document.getElementById("editSeatType").value || "group";
+  const preview = document.querySelector(".new-seat");
+
+  if (!preview) return;
+
+  preview.innerText = name;
+  preview.className = "seat new-seat " + type;
+  preview.dataset.type = type;
+}
+
+function addSeatToMap(dbId, seatId, type, x, y, status, isNew = false) {
+  const div = document.createElement("div");
+
+  div.className = "seat " + type;
+
+  if (status === "booked") {
+    div.classList.add("booked");
+  }
+
+  if (isNew) div.classList.add("new-seat");
+
+  div.innerText = seatId;
+
+  const img = document.querySelector("#map img");
+  const rect = img.getBoundingClientRect();
+
+  const scaleX = rect.width / 900;
+  const scaleY = rect.height / img.naturalHeight;
+
+  div.style.left = (x * scaleX) + "px";
+  div.style.top = (y * scaleY) + "px";
+
+  div.dataset.id = dbId;
+  div.dataset.x = x;
+  div.dataset.y = y;
+  div.dataset.type = type;
+  div.dataset.status = status || "available";
+
+  div.onclick = function(e) {
+    e.stopPropagation();
+
+    document.querySelectorAll(".seat").forEach(s => s.classList.remove("selected"));
+    div.classList.add("selected");
+
+    selectedSeatDbId = dbId;
+    selectedSeatId = seatId;
+    selectedSeatType = type;
+    selectedSeatStatus = status || "available";
+
+    document.getElementById("selectedSeatText").innerText = seatId;
+    document.getElementById("selectedZoneText").innerText = type;
+    document.getElementById("selectedStatusText").innerText = status || "available";
+
+    if (currentUserRole === "admin") {
+      document.getElementById("editSeatName").value = seatId;
+      document.getElementById("editSeatType").value = type;
+    }
+
+    loadAvailableTimes();
+  };
+
+  document.getElementById("map").appendChild(div);
+}
+
+function loadSeats() {
+  const date = document.getElementById("bookingDate").value;
+  const start = document.getElementById("startTime").value;
+  const end = document.getElementById("endTime").value;
+
+  let url = "http://localhost:3000/seats";
+
+  if (date && start && end) {
+    url = `http://localhost:3000/available-seats?booking_date=${date}&start_time=${start}&end_time=${end}`;
+  }
+
+  document.querySelectorAll(".seat").forEach(s => s.remove());
+
+  fetch(url, {
+    headers: { Authorization: localStorage.getItem("token") }
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (!data.seats) return;
+
+    data.seats.forEach(seat => {
+      addSeatToMap(
+        seat.id,
+        seat.seat_id,
+        seat.type,
+        seat.x,
+        seat.y,
+        seat.current_status || seat.status || "available"
+      );
+    });
+  });
+}
+
+document.getElementById("map").onclick = function(e) {
+  if (!isAddingSeat) return;
+
+  const rect = this.getBoundingClientRect();
+  const scaleX = 900 / rect.width;
+  const scaleY = this.querySelector("img").naturalHeight / rect.height;
+
+  newSeatX = Math.round((e.clientX - rect.left) * scaleX);
+  newSeatY = Math.round((e.clientY - rect.top) * scaleY);
+
+  document.querySelectorAll(".new-seat").forEach(s => s.remove());
+
+  const name = document.getElementById("editSeatName").value.trim() || "?";
+  const type = document.getElementById("editSeatType").value || "group";
+
+  addSeatToMap("new", name, type, newSeatX, newSeatY, "available", true);
+
+  document.getElementById("seatCoords").innerText =
+    "Seat placed. Type name, choose zone, then press Save Seat.";
+};
+
+function saveSeat() {
+  const name = document.getElementById("editSeatName").value.trim();
+  const type = document.getElementById("editSeatType").value;
+
+  if (!name || !type) {
+    alert("Please enter seat name and choose zone.");
+    return;
+  }
+
+  if (selectedSeatDbId && selectedSeatDbId !== "new") {
+    const selectedDiv = document.querySelector(".seat.selected");
+
+    if (!selectedDiv) {
+      alert("Please select a seat first.");
+      return;
+    }
+
+    fetch("http://localhost:3000/admin/seats/" + selectedSeatDbId, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: localStorage.getItem("token")
+      },
+      body: JSON.stringify({
+        seat_id: name,
+        type: type,
+        x: Number(selectedDiv.dataset.x),
+        y: Number(selectedDiv.dataset.y),
+        status: selectedSeatStatus || "available"
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      alert(data.message);
+      loadSeats();
+    });
+
+    return;
+  }
+
+  if (newSeatX === null || newSeatY === null) {
+    alert("Please click the map to place the seat first.");
+    return;
+  }
+
+  fetch("http://localhost:3000/admin/seats", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: localStorage.getItem("token")
+    },
+    body: JSON.stringify({
+      seat_id: name,
+      type: type,
+      x: newSeatX,
+      y: newSeatY
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert(data.message);
+
+    isAddingSeat = false;
+    newSeatX = null;
+    newSeatY = null;
+
+    document.getElementById("editSeatName").value = "";
+    document.getElementById("editSeatType").value = "";
+    document.getElementById("seatCoords").innerText = "";
+
+    loadSeats();
+  });
+}
+
+function deleteSelectedSeat() {
+  if (!selectedSeatDbId || selectedSeatDbId === "new") {
+    alert("Select a saved seat first.");
+    return;
+  }
+
+  if (!confirm("Delete this seat?")) return;
+
+  fetch("http://localhost:3000/admin/seats/" + selectedSeatDbId, {
+    method: "DELETE",
+    headers: { Authorization: localStorage.getItem("token") }
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert(data.message);
+
+    selectedSeatDbId = null;
+    selectedSeatId = null;
+    selectedSeatType = null;
+    selectedSeatStatus = null;
+
+    document.getElementById("selectedSeatText").innerText = "No seat selected";
+    document.getElementById("selectedZoneText").innerText = "-";
+    document.getElementById("selectedStatusText").innerText = "Available";
+    document.getElementById("confirmBtn").disabled = true;
+
+    clearTimeDropdowns();
+    loadSeats();
+  });
+}
+
+function loadAvailableTimes() {
+  const date = document.getElementById("bookingDate").value;
+
+  document.getElementById("confirmBtn").disabled = true;
+  document.getElementById("timeError").style.display = "none";
+  document.getElementById("timeSuccess").style.display = "none";
+
+  if (!selectedSeatId || !date) {
+    clearTimeDropdowns();
+    return;
+  }
+
+  fetch(`http://localhost:3000/seat-bookings?seat_id=${selectedSeatId}&booking_date=${date}`, {
+    headers: { Authorization: localStorage.getItem("token") }
+  })
+  .then(res => res.json())
+  .then(data => {
+    seatBookedTimes = data.bookings || [];
+    userUsedMinutes = Number(data.used_minutes || 0);
+    userRemainingMinutes = Number(data.remaining_minutes || 240);
+
+    updateStartTimes();
+    loadSeats();
+  });
+}
+
+function updateStartTimes() {
+  const date = document.getElementById("bookingDate").value;
+  const startSelect = document.getElementById("startTime");
+  const endSelect = document.getElementById("endTime");
+
+  startSelect.innerHTML = `<option value="">Select start time</option>`;
+  endSelect.innerHTML = `<option value="">Select start time first</option>`;
+
+  ALL_TIMES.slice(0, -1).forEach(time => {
+    if (isPastOrMoreThan24Hours(date, time)) return;
+
+    const nextTime = ALL_TIMES[ALL_TIMES.indexOf(time) + 1];
+
+    const blocked = seatBookedTimes.some(b =>
+      overlaps(
+        time,
+        nextTime,
+        String(b.start_time).slice(0, 5),
+        String(b.end_time).slice(0, 5)
+      )
+    );
+
+    if (!blocked) {
+      startSelect.innerHTML += `<option value="${time}">${timeLabel(time)}</option>`;
+    }
+  });
+
+  if (startSelect.options.length === 1) {
+    startSelect.innerHTML = `<option value="">No available start time</option>`;
+  }
+}
+
+function onStartTimeChange() {
+  const date = document.getElementById("bookingDate").value;
+  const start = document.getElementById("startTime").value;
+  const endSelect = document.getElementById("endTime");
+
+  endSelect.innerHTML = `<option value="">Select end time</option>`;
+
+  if (!start) {
+    validateBookingTime();
+    return;
+  }
+
+  for (const end of ALL_TIMES) {
+    if (timeToMinutes(end) <= timeToMinutes(start)) continue;
+
+    const duration = timeToMinutes(end) - timeToMinutes(start);
+
+    if (duration > 240) break;
+    if (duration > userRemainingMinutes) break;
+
+    const endDateTime = new Date(`${date}T${end}:00`);
+    const now = new Date();
+    const max = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+
+    if (endDateTime <= now || endDateTime > max) break;
+
+    const blocked = seatBookedTimes.some(b =>
+      overlaps(
+        start,
+        end,
+        String(b.start_time).slice(0, 5),
+        String(b.end_time).slice(0, 5)
+      )
+    );
+
+    if (blocked) break;
+
+    endSelect.innerHTML += `<option value="${end}">${timeLabel(end)}</option>`;
+  }
+
+  if (endSelect.options.length === 1) {
+    endSelect.innerHTML = `<option value="">No available end time</option>`;
+  }
+
+  validateBookingTime();
+}
+
+function validateBookingTime() {
+  const date = document.getElementById("bookingDate").value;
+  const start = document.getElementById("startTime").value;
+  const end = document.getElementById("endTime").value;
+  const confirmBtn = document.getElementById("confirmBtn");
+  const timeError = document.getElementById("timeError");
+  const timeSuccess = document.getElementById("timeSuccess");
+
+  timeError.style.display = "none";
+  timeSuccess.style.display = "none";
+  confirmBtn.disabled = true;
+
+  if (!selectedSeatId) return;
+  if (!date || !start || !end) return;
+
+  if (isPastOrMoreThan24Hours(date, start)) {
+    timeError.innerText = "You can only book within the next 24 hours.";
+    timeError.style.display = "block";
+    return;
+  }
+
+  const duration = timeToMinutes(end) - timeToMinutes(start);
+
+  if (duration <= 0) {
+    timeError.innerText = "End time must be after start time.";
+    timeError.style.display = "block";
+    return;
+  }
+
+  if (duration > 240) {
+    timeError.innerText = "Limit time is 4 hours per day.";
+    timeError.style.display = "block";
+    return;
+  }
+
+  if (duration > userRemainingMinutes) {
+    timeError.innerText = "You only have " + (userRemainingMinutes / 60) + " hour(s) left today.";
+    timeError.style.display = "block";
+    return;
+  }
+
+  const blocked = seatBookedTimes.some(b =>
+    overlaps(
+      start,
+      end,
+      String(b.start_time).slice(0, 5),
+      String(b.end_time).slice(0, 5)
+    )
+  );
+
+  if (blocked) {
+    timeError.innerText = "This seat is already booked during this time.";
+    timeError.style.display = "block";
+    return;
+  }
+
+  timeSuccess.innerText = "Selected duration: " + (duration / 60) + " hour(s).";
+  timeSuccess.style.display = "block";
+  confirmBtn.disabled = false;
+
+  loadSeats();
+}
+
+function validateBeforeBooking() {
+  const date = document.getElementById("bookingDate").value;
+  const start = document.getElementById("startTime").value;
+  const end = document.getElementById("endTime").value;
+
+  if (!date || !start || !end) {
+    alert("Please select date, start time, and end time.");
+    return false;
+  }
+
+  if (isPastOrMoreThan24Hours(date, start)) {
+    alert("You can only book within the next 24 hours.");
+    return false;
+  }
+
+  const duration = timeToMinutes(end) - timeToMinutes(start);
+
+  if (duration <= 0) {
+    alert("End time must be after start time.");
+    return false;
+  }
+
+  if (duration > 240) {
+    alert("Limit time is 4 hours per day.");
+    return false;
+  }
+
+  if (duration > userRemainingMinutes) {
+    alert("You only have " + (userRemainingMinutes / 60) + " hour(s) left today.");
+    return false;
+  }
+
+  return true;
+}
+
+function bookSelectedSeat() {
+  if (!selectedSeatId) {
+    alert("Please select a seat first.");
+    return;
+  }
+
+  if (!validateBeforeBooking()) return;
+
+  const bookingDate = document.getElementById("bookingDate").value;
+  const startTime = document.getElementById("startTime").value;
+  const endTime = document.getElementById("endTime").value;
+
+  fetch("http://localhost:3000/book-seat", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: localStorage.getItem("token")
+    },
+    body: JSON.stringify({
+      seat_id: selectedSeatId,
+      activity: selectedSeatType,
+      booking_date: bookingDate,
+      start_time: startTime,
+      end_time: endTime
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert(data.message);
+
+    document.getElementById("startTime").value = "";
+    document.getElementById("endTime").innerHTML = `<option value="">Select start time first</option>`;
+    document.getElementById("confirmBtn").disabled = true;
+
+    loadAvailableTimes();
+    loadSeats();
+    loadHistory();
+  })
+  .catch(() => {
+    alert("Booking error");
+  });
+}
+
+function loadHistory() {
+  fetch("http://localhost:3000/history", {
+    headers: { Authorization: localStorage.getItem("token") }
+  })
+  .then(res => res.json())
+  .then(data => {
+    const box = document.getElementById("historyList");
+
+    if (!data.history || data.history.length === 0) {
+      box.innerHTML = "No booking history yet.";
+      return;
+    }
+
+    box.innerHTML = data.history.map(item => {
+      const dateOnly = String(item.booking_date).split("T")[0];
+      const startOnly = String(item.start_time).slice(0, 5);
+      const startDateTime = new Date(`${dateOnly}T${startOnly}:00`);
+      const canCancel = new Date() < startDateTime;
+
+      return `
+        <div class="summary-box">
+          <strong>Seat ${item.seat_id}</strong>
+          <small>Zone: ${item.activity}</small>
+          <small>Date: ${dateOnly}</small>
+          <small>Start: ${String(item.start_time).slice(0, 5)}</small>
+          <small>End: ${String(item.end_time).slice(0, 5)}</small>
+
+          ${
+            canCancel
+              ? `<button class="cancel-btn" onclick="cancelBooking(${item.id})">Cancel Booking</button>`
+              : `<small style="color:#64748b;">Cannot cancel after start time</small>`
+          }
+        </div>
+      `;
+    }).join("");
+  });
+}
+
+function cancelBooking(id) {
+  if (!confirm("Cancel this booking?")) return;
+
+  fetch("http://localhost:3000/bookings/" + id + "/cancel", {
+    method: "DELETE",
+    headers: { Authorization: localStorage.getItem("token") }
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert(data.message);
+    loadHistory();
+    loadAvailableTimes();
+    loadSeats();
+  });
+}
 
 function goPage(page, element) {
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
@@ -747,28 +1252,30 @@ function goPage(page, element) {
 
   const title = document.getElementById("pageTitle");
   const subtitle = document.getElementById("pageSubtitle");
-  const aiInputArea = document.getElementById("aiInputArea");
 
   if (page === "checkin") {
-  title.innerText = "Check In";
-  subtitle.innerText = "Verify your location at KMUTT Library";
-  aiInputArea.style.display = "none";
+    title.innerText = "Check In";
+    subtitle.innerText = "Verify your location near 40 Orchard View Blvd";
+    loadCheckInBookings();
+
+    setTimeout(() => {
+      if (checkinMap) checkinMap.invalidateSize();
+    }, 300);
   } else if (page === "seats") {
     title.innerText = "Seat Map";
     subtitle.innerText = "Choose your preferred library seat";
-    aiInputArea.style.display = "none";
+    loadSeats();
+    loadAvailableTimes();
   } else if (page === "profile") {
     title.innerText = "Profile";
     subtitle.innerText = "Manage your account details";
-    aiInputArea.style.display = "none";
   } else if (page === "history") {
     title.innerText = "History";
     subtitle.innerText = "View your booking history";
-    aiInputArea.style.display = "none";
+    loadHistory();
   } else {
     title.innerText = "Clear Library";
     subtitle.innerText = "Here is your dashboard overview";
-    aiInputArea.style.display = "none";
   }
 }
 
@@ -793,154 +1300,197 @@ fetch("http://localhost:3000/dashboard", {
   document.getElementById("firstName").value = d.user.first_name;
   document.getElementById("lastName").value = d.user.last_name;
   document.getElementById("studentId").value = d.user.student_id;
+
+  if (d.user.role === "admin") {
+    document.getElementById("adminSeatControls").style.display = "block";
+  }
+
+  const todayDate = new Date();
+  const tomorrowDate = new Date();
+  tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+
+  const today = localDateString(todayDate);
+  const tomorrow = localDateString(tomorrowDate);
+
+  document.getElementById("bookingDate").value = today;
+  document.getElementById("bookingDate").min = today;
+  document.getElementById("bookingDate").max = tomorrow;
+
+  loadSeats();
+  loadHistory();
+  clearTimeDropdowns();
 });
 
-function quickAsk(text) {
-  document.getElementById("aiQuestion").value = text;
-  askAI();
+let checkinMap = null;
+let currentUserLat = null;
+let currentUserLng = null;
+let currentDistanceMeters = null;
+
+function getDistanceMeters(lat1, lon1, lat2, lon2) {
+  const R = 6371000;
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos((lat1 * Math.PI) / 180) *
+    Math.cos((lat2 * Math.PI) / 180) *
+    Math.sin(dLon / 2) ** 2;
+
+  return 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)) * R;
 }
 
-function askAI() {
-  const input = document.getElementById("aiQuestion");
-  const message = input.value.trim();
+function showCheckInMap(userLat, userLng) {
+  if (checkinMap) checkinMap.remove();
 
-  if (!message) return;
+  checkinMap = L.map("checkinMap").setView([LIBRARY_CONFIG.lat, LIBRARY_CONFIG.lng], 16);
 
-  const aiPage = document.querySelector("#assistant .ai-page");
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "© OpenStreetMap"
+  }).addTo(checkinMap);
 
-  aiPage.innerHTML += `
-    <div class="chat-row user">
-      <div class="bubble user">${message}</div>
-    </div>
-    <div class="chat-row">
-      <div class="bubble ai">Thinking...</div>
-    </div>
-  `;
+  const libraryMarker = L.marker([LIBRARY_CONFIG.lat, LIBRARY_CONFIG.lng])
+    .addTo(checkinMap)
+    .bindPopup("Library<br>40 Orchard View Blvd");
 
-  input.value = "";
+  const userMarker = L.marker([userLat, userLng])
+    .addTo(checkinMap)
+    .bindPopup("You are here");
 
-  fetch("http://localhost:3000/ask-ai", {
+  L.circle([LIBRARY_CONFIG.lat, LIBRARY_CONFIG.lng], {
+    radius: LIBRARY_CONFIG.checkInRadiusMeters
+  }).addTo(checkinMap);
+
+  const group = L.featureGroup([libraryMarker, userMarker]);
+  checkinMap.fitBounds(group.getBounds().pad(0.3));
+}
+
+function loadCheckInBookings() {
+  const status = document.getElementById("locationStatus");
+  const list = document.getElementById("checkinBookingList");
+
+  status.innerText = "Checking your location...";
+  list.innerHTML = "Loading today’s bookings...";
+
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      currentUserLat = position.coords.latitude;
+      currentUserLng = position.coords.longitude;
+
+      currentDistanceMeters = getDistanceMeters(
+        currentUserLat,
+        currentUserLng,
+        LIBRARY_CONFIG.lat,
+        LIBRARY_CONFIG.lng
+      );
+
+      showCheckInMap(currentUserLat, currentUserLng);
+
+      const tooFar = currentDistanceMeters > LIBRARY_CONFIG.checkInRadiusMeters;
+
+      if (tooFar) {
+        status.style.color = "#dc2626";
+        status.innerText =
+          "You are " + Math.round(currentDistanceMeters) +
+          "m away. You must be within 500m to check in.";
+      } else {
+        status.style.color = "#16a34a";
+        status.innerText =
+          "You are " + Math.round(currentDistanceMeters) +
+          "m away. Location is valid.";
+      }
+
+      fetch("http://localhost:3000/check-in/bookings", {
+        headers: { Authorization: localStorage.getItem("token") }
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (!data.bookings || data.bookings.length === 0) {
+          list.innerHTML = "No booking for today.";
+          return;
+        }
+
+        list.innerHTML = data.bookings.map(booking => {
+          const dateOnly = String(booking.booking_date).split("T")[0];
+          const startOnly = String(booking.start_time).slice(0, 5);
+          const endOnly = String(booking.end_time).slice(0, 5);
+
+          const startDateTime = new Date(`${dateOnly}T${startOnly}:00`);
+          const earliest = new Date(
+            startDateTime.getTime() - LIBRARY_CONFIG.earlyCheckInMinutes * 60 * 1000
+          );
+
+          const latest = new Date(
+            startDateTime.getTime() + LIBRARY_CONFIG.lateLimitMinutes * 60 * 1000
+          );
+          const now = new Date();
+
+          let disabled = "";
+          let note = "";
+
+          if (tooFar) {
+            disabled = "disabled";
+            note = "Too far from library.";
+          } else if (now < earliest) {
+            disabled = "disabled";
+            note = "Check-in opens 30 minutes before booking.";
+          } else if (now > latest) {
+            disabled = "disabled";
+            note = "More than 15 minutes late. Booking will be cancelled automatically.";
+          } else {
+            note = "Ready to confirm check-in.";
+          }
+
+          return `
+            <div class="summary-box">
+              <strong>Seat ${booking.seat_id}</strong>
+              <small>Zone: ${booking.activity}</small>
+              <small>Date: ${dateOnly}</small>
+              <small>Time: ${startOnly} - ${endOnly}</small>
+              <small>${note}</small>
+
+              <button
+                class="confirm-btn"
+                ${disabled}
+                onclick="confirmCheckIn(${booking.id})"
+              >
+                Confirm Check In
+              </button>
+            </div>
+          `;
+        }).join("");
+      });
+    },
+    () => {
+      status.style.color = "#dc2626";
+      status.innerText = "Please allow location access.";
+      list.innerHTML = "Location access is required.";
+    }
+  );
+}
+
+function confirmCheckIn(bookingId) {
+  fetch("http://localhost:3000/check-in", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      Authorization: localStorage.getItem("token")
     },
     body: JSON.stringify({
-      message: message
+      booking_id: bookingId,
+      student_id: document.getElementById("sideStudentId").innerText,
+      lat: currentUserLat,
+      lng: currentUserLng
     })
   })
   .then(res => res.json())
   .then(data => {
-    const aiBubbles = document.querySelectorAll(".bubble.ai");
-    aiBubbles[aiBubbles.length - 1].innerText = data.reply;
-  })
-  .catch(() => {
-    const aiBubbles = document.querySelectorAll(".bubble.ai");
-    aiBubbles[aiBubbles.length - 1].innerText = "AI server error.";
+    alert(data.message);
+    loadCheckInBookings();
+    loadSeats();
+    loadHistory();
   });
 }
-
-function addSeat(id, type, x, y) {
-  const div = document.createElement("div");
-  div.className = "seat " + type;
-  div.innerText = id;
-  div.style.left = x + "px";
-  div.style.top = y + "px";
-
-  div.onclick = () => {
-    document.querySelectorAll(".seat").forEach(s => s.classList.remove("selected"));
-    div.classList.add("selected");
-
-    selectedSeatId = id;
-    selectedSeatType = type;
-
-    document.getElementById("selectedSeatText").innerText = id;
-    document.getElementById("selectedZoneText").innerText = type;
-    document.getElementById("confirmBtn").disabled = false;
-  };
-
-  document.getElementById("map").appendChild(div);
-}
-
-addSeat("M1","meeting",650,145);
-addSeat("M2","meeting",550,120);
-addSeat("G1","group",285,245);
-addSeat("G2","group",400,300);
-addSeat("Q1","quiet",120,400);
-addSeat("Q2","quiet",120,450);
-addSeat("C1","computer",160,200);
-
-function bookSelectedSeat() {
-  if (!selectedSeatId) {
-    alert("Please select a seat first.");
-    return;
-  }
-
-  navigator.geolocation.getCurrentPosition(
-    (position) => {
-      fetch("http://localhost:3000/book-seat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: localStorage.getItem("token")
-        },
-        body: JSON.stringify({
-          seat_id: selectedSeatId,
-          activity: selectedSeatType,
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        })
-      })
-      .then(res => res.json())
-      .then(data => {
-        alert(data.message);
-      })
-      .catch(() => {
-        alert("Booking error");
-      });
-    },
-    () => {
-      alert("Please allow location access to book a seat.");
-    }
-  );
-}
-
-function checkIn() {
-  const studentId = document.getElementById("checkinStudentId").value;
-
-  if (!studentId) {
-    alert("Please enter your Student ID");
-    return;
-  }
-
-  navigator.geolocation.getCurrentPosition(
-    (position) => {
-      fetch("http://localhost:3000/check-in", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: localStorage.getItem("token")
-        },
-        body: JSON.stringify({
-          student_id: studentId,
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        })
-      })
-      .then(res => res.json())
-      .then(data => {
-        alert(data.message);
-      })
-      .catch(() => {
-        alert("Check-in error");
-      });
-    },
-    () => {
-      alert("Please allow location access to check in");
-    }
-  );
-}
-
-
 
 function saveProfile() {
   alert("Profile saved (backend not connected yet)");
@@ -948,6 +1498,7 @@ function saveProfile() {
 
 function logout() {
   localStorage.removeItem("token");
+  localStorage.removeItem("role");
   window.location.href = "index.html";
 }
 </script>
