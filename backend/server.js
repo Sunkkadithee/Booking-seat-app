@@ -763,6 +763,63 @@ app.delete("/bookings/:id/cancel", verifyToken, (req, res) => {
   );
 });
 
+app.get("/announcements", verifyToken, (req, res) => {
+  db.query(
+    "SELECT * FROM announcements ORDER BY created_at DESC",
+    (err, results) => {
+      if (err) return res.status(500).json({ message: "Announcement load error" });
+      res.json({ announcements: results });
+    }
+  );
+});
+app.post("/admin/announcements", verifyToken, allowRoles("admin"), (req, res) => {
+  const { title, detail, color } = req.body;
+
+  if (!title || !detail) {
+    return res.status(400).json({ message: "Title and detail are required" });
+  }
+
+  db.query(
+    "INSERT INTO announcements (title, detail, color) VALUES (?, ?, ?)",
+    [title, detail, color || "#ff4325"],
+    (err) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({ message: "Announcement add error" });
+      }
+
+      res.json({ message: "Announcement added" });
+    }
+  );
+});
+app.put("/admin/announcements/:id", verifyToken, allowRoles("admin"), (req, res) => {
+  const { title, detail, color } = req.body;
+
+  if (!title || !detail) {
+    return res.status(400).json({ message: "Title and detail are required" });
+  }
+
+  db.query(
+    "UPDATE announcements SET title = ?, detail = ?, color = ? WHERE id = ?",
+    [title, detail, color || "#ff4325", req.params.id],
+    (err) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({ message: "Announcement update error" });
+      }
+
+      res.json({ message: "Announcement updated" });
+    }
+  );
+});
+
+app.delete("/admin/announcements/:id", verifyToken, allowRoles("admin"), (req, res) => {
+  db.query("DELETE FROM announcements WHERE id = ?", [req.params.id], (err) => {
+    if (err) return res.status(500).json({ message: "Announcement delete error" });
+    res.json({ message: "Announcement deleted" });
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

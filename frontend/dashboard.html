@@ -538,6 +538,19 @@ button.save {
   overflow: hidden;
 }
 
+textarea {
+  width: 100%;
+  padding: 14px 16px;
+  margin: 10px 0;
+  border-radius: 14px;
+  border: 1px solid #dbe3ef;
+  outline: none;
+  background: #f8fafc;
+  font-size: 15px;
+  font-weight: 500;
+  color: #172033;
+}
+
 .avatar img {
   width: 100%;
   height: 100%;
@@ -647,12 +660,13 @@ button.save {
         </div>
       </div>
 
-      <div class="card">
-        <h3>📢 Announcements</h3>
+<!-- <div class="card">
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+    <h3>📢 Announcements</h3>
         <div class="announcement" style="border-left:4px solid #facc15;">
           <small>Today • Important</small>
           <strong style="display:block; margin-top:4px;">Library closes at 10:00 PM</strong>
-        </div>
+  </div>
         <div class="announcement" style="border-left:4px solid #22c55e;">
           <small>Food • Event</small>
           <strong style="display:block; margin-top:4px;">Free hot chocolate at 3:00 PM ☕</strong>
@@ -660,15 +674,48 @@ button.save {
         <div class="announcement" style="border-left:4px solid #3b82f6;">
           <small>Update</small>
           <strong style="display:block; margin-top:4px;">New group seats added 🎉</strong>
-        </div>
+        </div> -->
+<!-- </div> -->
+
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h3>📢 Announcements</h3>
+        <button
+          id="addAnnouncementBtn"
+          class="book-btn"
+          style="display:none; width:auto; padding:10px 16px;"
+          onclick="showAnnouncementForm()"
+        >
+          Add
+        </button>
       </div>
+
+      <div id="announcementForm" style="display:none; margin-top:16px;">
+        <input id="announcementTitle" placeholder="Announcement title">
+        <textarea
+          id="announcementDetail"
+          placeholder="Announcement detail"
+          rows="4"
+          style="width:100%; padding:14px 16px; margin:10px 0; border-radius:14px; border:1px solid #dbe3ef; background:#f8fafc;"
+        ></textarea>
+        <select id="announcementColor">
+        <option value="#facc15">Yellow - Important</option>
+        <option value="#22c55e">Green - Event</option>
+        <option value="#3b82f6">Blue - Update</option>
+        <option value="#ff4325">Red - Notice</option>
+      </select>
+        <button class="confirm-btn" onclick="saveAnnouncement()">Save Announcement</button>
+      </div>
+
+      <div id="announcementList"></div>
+    </div>
 
       <div class="card">
         <h3>📸 Library Highlights</h3>
         <div class="slider">
-          <img class="slide" src="asset/images/clean.jpg">
-          <img class="slide" src="asset/images/hotchocolate.jpeg">
-          <img class="slide" src="asset/images/donations.jpeg">
+         <img class="slide" src="asset/images/clean.jpg" onclick="showHighlightImage(this.src)">
+        <img class="slide" src="asset/images/hotchocolate.jpeg" onclick="showHighlightImage(this.src)">
+        <img class="slide" src="asset/images/donations.jpeg" onclick="showHighlightImage(this.src)">
         </div>
       </div>
     </div>
@@ -823,6 +870,46 @@ button.save {
     </div>
 
   </div>
+</div>
+
+<div id="popupOverlay" style="
+
+  display:none;
+
+  position:fixed;
+
+  inset:0;
+
+  background:rgba(0,0,0,0.45);
+
+  z-index:9999;
+
+  align-items:center;
+
+  justify-content:center;
+
+">
+
+  <div style="
+
+    background:white;
+
+    width:420px;
+
+    max-width:90%;
+
+    border-radius:18px;
+
+    padding:24px;
+
+  ">
+
+    <div id="popupBody"></div>
+
+    <button class="cancel-btn" onclick="closePopup()">Close</button>
+
+  </div>
+
 </div>
 
 <script src="map.js"></script>
@@ -1262,6 +1349,26 @@ function onStartTimeChange() {
   validateBookingTime();
 }
 
+function openPopup() {
+  document.getElementById("popupOverlay").style.display = "flex";
+}
+
+function closePopup() {
+  document.getElementById("popupOverlay").style.display = "none";
+}
+
+function showHighlightImage(imageSrc) {
+  
+  document.getElementById("popupBody").innerHTML = `
+    <img 
+      src="${imageSrc}" 
+      style="width:100%; max-height:70vh; object-fit:contain; border-radius:14px;"
+    >
+  `;
+
+  openPopup();
+}
+
 function validateBookingTime() {
   const date = document.getElementById("bookingDate").value;
   const start = document.getElementById("startTime").value;
@@ -1548,11 +1655,13 @@ fetch(`${API_BASE}/dashboard`, {
 
   if (d.user.role === "admin") {
     document.getElementById("adminSeatControls").style.display = "block";
+    document.getElementById("addAnnouncementBtn").style.display = "inline-block";
     currentUserRole = "admin";
 }
 
 loadSeats();
 loadHistory();
+loadAnnouncements();
 
 updateClock();
 setInterval(updateClock, 1000);
@@ -1810,6 +1919,131 @@ function confirmCheckIn(bookingId) {
       loadSeats();
       loadHistory();
     });
+}
+
+let editingAnnouncementId = null;
+
+function loadAnnouncements() {
+  fetch(`${API_BASE}/announcements`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+  })
+    .then(res => res.json())
+    .then(data => {
+      const box = document.getElementById("announcementList");
+
+      if (!data.announcements || data.announcements.length === 0) {
+        box.innerHTML = `<p>No announcements yet.</p>`;
+        return;
+      }
+
+      box.innerHTML = data.announcements.map(a => `
+        <div class="announcement" style="border-left:4px solid ${a.color || "#ff4325"};">
+          <strong style="display:block; margin-top:4px;">${escapeHtml(a.title)}</strong>
+          <p style="color:#64748b; line-height:1.5;">${escapeHtml(a.detail)}</p>
+
+          ${
+            currentUserRole === "admin"
+              ? `
+                <div style="display:flex; gap:8px; margin-top:10px;">
+                  <button class="save" onclick="editAnnouncement(${a.id})">Edit</button>
+                  <button class="cancel-btn" style="margin:0; width:auto;" onclick="deleteAnnouncement(${a.id})">Delete</button>
+                </div>
+              `
+              : ""
+          }
+        </div>
+      `).join("");
+
+      window.announcementData = data.announcements;
+    });
+}
+
+function showAnnouncementForm() {
+  editingAnnouncementId = null;
+  document.getElementById("announcementTitle").value = "";
+  document.getElementById("announcementDetail").value = "";
+  document.getElementById("announcementColor").value = "#facc15";
+  document.getElementById("announcementForm").style.display = "block";
+}
+
+function saveAnnouncement() {
+  const title = document.getElementById("announcementTitle").value.trim();
+  const detail = document.getElementById("announcementDetail").value.trim();
+  const color = document.getElementById("announcementColor").value;
+
+  if (!title || !detail) {
+    alert("Please enter title and detail.");
+    return;
+  }
+
+  fetch(`${API_BASE}/admin/announcements`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`
+    },
+    body: JSON.stringify({ title, detail, color })
+  })
+    .then(async res => {
+      const text = await res.text();
+      console.log("STATUS:", res.status);
+      console.log("RAW RESPONSE:", text);
+
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        alert("Backend returned non-JSON. Check terminal/server error.");
+        return;
+      }
+
+      if (!res.ok) {
+        alert(data.message || "Save failed");
+        return;
+      }
+
+      alert(data.message);
+      document.getElementById("announcementForm").style.display = "none";
+      loadAnnouncements();
+    })
+    .catch(err => {
+      console.error("FETCH REAL ERROR:", err);
+      alert(err.message);
+    });
+}
+
+function editAnnouncement(id) {
+  const a = window.announcementData.find(item => item.id === id);
+  if (!a) return;
+
+  editingAnnouncementId = id;
+  document.getElementById("announcementTitle").value = a.title;
+  document.getElementById("announcementDetail").value = a.detail;
+  document.getElementById("announcementColor").value = a.color || "#ff4325";
+  document.getElementById("announcementForm").style.display = "block";
+}
+
+function deleteAnnouncement(id) {
+  if (!confirm("Delete this announcement?")) return;
+
+  fetch(`${API_BASE}/admin/announcements/${id}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+  })
+    .then(res => res.json())
+    .then(data => {
+      alert(data.message);
+      loadAnnouncements();
+    });
+}
+
+function escapeHtml(text) {
+  return String(text || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
 
 function logout() {
